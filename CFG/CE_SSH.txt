@@ -1,0 +1,208 @@
+!CfgFileCrc:d8e24226
+!Software Version V200R005C10SPC607B607
+!Last configuration was updated at 2025-09-24 16:48:46 UTC
+!Last configuration was saved at 2025-09-24 16:56:06 UTC
+!MKHash 0000000000000000
+#
+sysname S1_LSW_EOR01
+#
+device board 1 board-type CE-MPUB
+#
+vlan batch 20
+#
+aaa
+ undo local-user policy security-enhance
+ local-user netconftest password irreversible-cipher $1c$#2~m-\ci:R$o1.O#fUlhAh:i*2d]|<Cu"x4${gxfBpibHJ~:_Q5$
+ local-user netconftest service-type ssh
+ local-user netconftest level 3
+ local-user netconftest user-group manage-ug
+ #
+ authentication-scheme default
+ #
+ authorization-scheme default
+ #
+ accounting-scheme default
+ #
+ domain default
+ #
+ domain default_admin
+#
+interface Vlanif20
+ ip address 192.168.85.253 255.255.255.0
+#
+interface MEth0/0/0
+ undo shutdown
+ ip address 192.105.146.33 255.255.255.0
+#
+interface GE1/0/0
+ undo shutdown
+ port default vlan 20
+#
+interface GE1/0/1
+ shutdown
+#
+interface GE1/0/2
+ shutdown
+#
+interface GE1/0/3
+ shutdown
+#
+interface GE1/0/4
+ shutdown
+#
+interface GE1/0/5
+ shutdown
+#
+interface GE1/0/6
+ shutdown
+#
+interface GE1/0/7
+ shutdown
+#
+interface GE1/0/8
+ shutdown
+#
+interface GE1/0/9
+ shutdown
+#
+interface GE1/0/10
+ shutdown
+#
+interface GE1/0/11
+ shutdown
+#
+interface GE1/0/12
+ shutdown
+#
+interface GE1/0/13
+ shutdown
+#
+interface GE1/0/14
+ shutdown
+#
+interface GE1/0/15
+ shutdown
+#
+interface GE1/0/16
+ shutdown
+#
+interface GE1/0/17
+ shutdown
+#
+interface GE1/0/18
+ shutdown
+#
+interface GE1/0/19
+ shutdown
+#
+interface GE1/0/20
+ shutdown
+#
+interface GE1/0/21
+ shutdown
+#
+interface GE1/0/22
+ shutdown
+#
+interface GE1/0/23
+ shutdown
+#
+interface GE1/0/24
+ shutdown
+#
+interface GE1/0/25
+ shutdown
+#
+interface GE1/0/26
+ shutdown
+#
+interface GE1/0/27
+ shutdown
+#
+interface GE1/0/28
+ shutdown
+#
+interface GE1/0/29
+ shutdown
+#
+interface GE1/0/30
+ shutdown
+#
+interface GE1/0/31
+ shutdown
+#
+interface GE1/0/32
+ shutdown
+#
+interface GE1/0/33
+ shutdown
+#
+interface GE1/0/34
+ shutdown
+#
+interface GE1/0/35
+ shutdown
+#
+interface GE1/0/36
+ shutdown
+#
+interface GE1/0/37
+ shutdown
+#
+interface GE1/0/38
+ shutdown
+#
+interface GE1/0/39
+ shutdown
+#
+interface GE1/0/40
+ shutdown
+#
+interface GE1/0/41
+ shutdown
+#
+interface GE1/0/42
+ shutdown
+#
+interface GE1/0/43
+ shutdown
+#
+interface GE1/0/44
+ shutdown
+#
+interface GE1/0/45
+ shutdown
+#
+interface GE1/0/46
+ shutdown
+#
+interface GE1/0/47
+ shutdown
+#
+interface NULL0
+#
+stelnet server enable
+snetconf server enable
+ssh user netconftest
+ssh user netconftest authentication-type password
+ssh user netconftest service-type stelnet
+ssh authorization-type default aaa
+#
+ssh server cipher aes256_gcm aes128_gcm aes256_ctr aes192_ctr aes128_ctr aes256_cbc aes128_cbc 3des_cbc
+#
+ssh server dh-exchange min-len 1024
+#
+ssh client cipher aes256_gcm aes128_gcm aes256_ctr aes192_ctr aes128_ctr aes256_cbc aes128_cbc 3des_cbc
+#
+user-interface maximum-vty 21
+#
+user-interface con 0
+#
+user-interface vty 0 20
+ authentication-mode aaa
+ idle-timeout 0 0
+ protocol inbound ssh
+#
+vm-manager
+#
+return
