@@ -1,19 +1,28 @@
-# VisualNetAutomator - 可视化网络自动化交互工具
+# VisualNetAutomator - Python网络设备自动化巡检平台
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python Version](https://img.shields.io/badge/Python-3.7%2B-blue.svg)](https://www.python.org/)
+[![Version](https://img.shields.io/badge/Version-v2.0-blue.svg)](https://github.com/yearsGG/python-automation-learning)
 
-一款为网络工程师和NetDevOps初学者设计的、带有彩色高亮和交互记忆功能的SSH/Telnet调试工具。它旨在弥合手动CLI操作与全自动化脚本之间的鸿沟，让自动化过程“看得见、摸得着”。
+一款为网络工程师和NetDevOps初学者设计的、功能完整的网络设备自动化巡检平台。集成可视化SSH/Telnet交互、批量设备巡检、性能监控、报告生成和告警通知功能。
 
 ---
 
 ## 🚀 项目亮点 (Key Features)
 
-- **🎨 可视化交互**: 所有发送和接收的数据都带有彩色高亮，清晰区分指令、设备回显和工具日志。
-- **🧠 记忆功能**: 自动记忆上一次的设备提示符，简化连续命令的执行，代码更简洁。
-- ** SSH & Telnet 双协议支持**: 提供 `VisualSSH` 和 `VisualTelnet` 两个类，无缝切换安全与兼容模式。
-- **🔄 自动翻页**: 智能识别并处理华为VRP等系统的`---- More ----`翻页提示，自动发送空格。
-- **🧩 模块化设计**: 代码结构清晰，易于理解和扩展，可方便地集成到更大型的自动化项目中。
+### v2.0 新增功能 🎉
+- **📊 批量设备巡检**: 支持多线程并发巡检，自动采集设备CPU、内存、接口状态等性能指标
+- **🏓 Ping连通性检测**: 批量Ping测试，快速识别离线设备
+- **📈 报告生成**: 自动生成文本/Excel巡检报告，支持历史数据对比
+- **⚠️ 智能告警**: 阈值告警功能，支持邮件通知（可选）
+- **⚙️ 配置化管理**: 通过INI配置文件管理设备列表和巡检参数
+
+### v1.0 核心功能
+- **🎨 可视化交互**: 所有发送和接收的数据都带有彩色高亮，清晰区分指令、设备回显和工具日志
+- **🧠 记忆功能**: 自动记忆上一次的设备提示符，简化连续命令的执行，代码更简洁
+- **🔐 SSH & Telnet 双协议支持**: 提供 `VisualSSH` 和 `VisualTelnet` 两个类，无缝切换安全与兼容模式
+- **🔄 自动翻页**: 智能识别并处理华为VRP等系统的`---- More ----`翻页提示，自动发送空格
+- **🧩 模块化设计**: 代码结构清晰，易于理解和扩展，可方便地集成到更大型的自动化项目中
 
 ## ✨ 效果演示 (Screenshots)
 
@@ -67,6 +76,43 @@
 
 ## 📚 如何使用 (Quick Start)
 
+### 方式一：快速巡检（v2.0推荐）
+
+1. **配置设备列表**
+
+编辑 `inspection_config.ini` 文件，添加你要巡检的设备：
+
+```ini
+[devices]
+count = 2
+
+device1_name = SW-Core1
+device1_host = 192.168.1.1
+device1_port = 22
+device1_username = admin
+device1_password = yourpassword
+
+device2_name = R-WAN1
+device2_host = 192.168.1.2
+device2_port = 22
+device2_username = admin
+device2_password = yourpassword
+```
+
+2. **运行巡检**
+
+```bash
+python main_inspection.py
+```
+
+3. **查看报告**
+
+巡检完成后，在 `reports/` 目录下查看生成的报告文件。
+
+---
+
+### 方式二：可视化调试（v1.0核心功能）
+
 下面是一个使用 `VisualSSH` 连接一台华为设备并执行命令的简单示例 (`main.py`)：
 
 ```python
@@ -106,11 +152,53 @@ finally:
         ssh.close()
 ```
 
+## 📁 项目结构
+
+```
+python自动化/
+├── my_visual_ssh.py          # SSH可视化交互类
+├── my_visual_telnet.py       # Telnet可视化交互类
+├── device_inspector.py       # 设备巡检核心模块（v2.0新增）
+├── main_inspection.py        # 完整巡检主程序（v2.0新增）
+├── main_refactored.py        # 配置化的SSH执行示例
+├── main.py                   # 简单SSH示例
+├── config.ini                # 单设备配置文件
+├── inspection_config.ini     # 巡检配置文件（v2.0新增）
+├── requirements.txt          # Python依赖包列表
+├── reports/                  # 巡检报告目录
+├── log/                      # 日志文件目录
+├── README.md                 # 本文档
+├── 培训计划与职业发展路线图.md   # 学习规划文档
+└── 实验网络拓扑设计.md          # 网络拓扑设计方案
+```
+
+## 🎓 学习资源
+
+本项目附带了完整的学习规划文档：
+
+- 📖 **[培训计划与职业发展路线图.md](培训计划与职业发展路线图.md)**: 
+  - 从待培养阶段到中高级NetDevOps工程师的完整学习路径
+  - 薄弱技能补强计划（NetworkX、Requests、Wireshark、Kubernetes等）
+  - 3个月冲刺计划和职业发展建议
+
+- 🌐 **[实验网络拓扑设计.md](实验网络拓扑设计.md)**:
+  - 3种难度的网络拓扑方案（小型/中型/大型企业网络）
+  - 详细的设备配置模板和IP地址规划
+  - 自动化测试场景设计
+
 ## 🔮 未来计划 (Roadmap)
 
-- [ ] 增加对不同厂商设备提示符的自动识别能力。
-- [ ] 将返回的文本结果进行结构化解析。
-- [ ] 封装成一个更易于安装和分发的Python包。
+### v2.1 计划
+- [ ] 集成SNMP数据采集功能（使用pysnmp）
+- [ ] 使用TextFSM进行结构化数据解析
+- [ ] Excel格式巡检报告（带图表）
+- [ ] Web界面展示巡检结果
+
+### v3.0 愿景
+- [ ] NetworkX网络拓扑自动发现与可视化
+- [ ] 支持NETCONF/RESTCONF API
+- [ ] 配置自动备份和变更检测
+- [ ] 容器化部署（Docker + Kubernetes）
 
 ## 许可证 (License)
 

@@ -1,5 +1,5 @@
 # main.py
-from my_visual_telnet import VisualTelnet # 假设你的工具在这个文件里
+from my_visual_telnet import VisualTelnet 
 
 all_devices = [
     {
