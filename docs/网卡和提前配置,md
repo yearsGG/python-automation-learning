@@ -1,0 +1,5 @@
+# 示例：将 IP 设为 192.168.20.254，子网掩码 /24
+sudo ip addr add 192.168.10.254/24 dev pnet9
+
+# 激活网卡
+sudo ip link set pnet9 up

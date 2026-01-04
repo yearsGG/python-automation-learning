@@ -1,0 +1,46 @@
+INFO:__main__:--- 准备 SSH 连接到 192.168.10.1:22 ---
+INFO:paramiko.transport:Connected (version 2.0, client HUAWEI-1.5)
+INFO:paramiko.transport:Authentication (password) successful!
+INFO:__main__:--- SSH 连接成功！ ---
+INFO:__main__:--- [等待并记忆] ...正在等到标志: b'>'... ---
+INFO:__main__:[接收] <<<
+
+  -----------------------------------------------------------------------------     
+  User last login information:     
+  -----------------------------------------------------------------------------
+  Access Type: SSH      
+  IP-Address : 192.168.10.254     
+  Time       : 2017-01-01 00:26:46+00:00     
+  -----------------------------------------------------------------------------
+<AR1000v>
+INFO:__main__:--- [记忆更新] 当前提示符已设为: b'>' ---
+INFO:__main__:[发送] >>> b'system-view\n'
+INFO:__main__:--- [等待并记忆] ...正在等到标志: b']'... ---
+INFO:__main__:[接收] <<<
+system-view
+Enter system view, return user view with Ctrl+Z.
+[AR1000v]
+INFO:__main__:--- [记忆更新] 当前提示符已设为: b']' ---
+INFO:__main__:--- [智能执行] 正在执行命令: b'display version' ---
+INFO:__main__:--- [使用记忆] 将等待最终提示符: b']' ---
+INFO:__main__:[发送] >>> b'display version\n'
+INFO:__main__:--- [执行完毕] 检测到最终提示符，输出完成。 ---
+INFO:__main__:[接收] <<<
+display version
+Huawei Versatile Routing Platform Software
+VRP (R) software, Version 5.170 (AR1000V V300R022C00SPC100)
+Copyright (C) 2011-2022 HUAWEI TECH CO., LTD
+Huawei AR1000V Router uptime is 0 week, 0 day, 0 hour, 43 minutes
+
+MPU 0(Master) : uptime is 0 week, 0 day, 0 hour, 42 minutes
+SDRAM Memory Size    : 2048    M bytes
+MPU version information : 
+1. PCB      Version  : AR01SRU0B VER.A
+2. MAB      Version  : 0
+3. Board    Type     : AR1000V
+4. BootROM  Version  : 0
+
+[AR1000v]
+INFO:__main__:调用 ntc_templates 解析: platform=huawei_vrp, command=display version
+INFO:__main__:解析成功，获得 1 条数据
+INFO:__main__:--- 关闭 SSH 连接 ---

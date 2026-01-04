@@ -1,0 +1,106 @@
+
+# --- 配置Telnet服务（备选） ---
+# Telnet已在上面的VTY配置中启用
+
+# --- 其他有用的配置 ---
+# 配置系统时间（可选）
+clock timezone BJ add 08:00:00
+
+# 配置日志（可选）
+info-center enable
+info-center loghost 192.168.10.100
+
+# 配置SNMP（可选）
+snmp-agent
+snmp-agent community read public
+snmp-agent sys-info version v2c
+
+# --- 保存配置 ---
+quit
+save
+# 输入 Y 确认保存
+
+# ============================================
+# 验证配置
+# ============================================
+
+# 检查接口状态
+display ip interface brief
+
+# 检查SSH服务状态
+display ssh server status
+
+# 检查用户配置
+display aaa local-user
+
+# 检查VTY配置
+display current-configuration | include user-interface
+
+# 检查当前配置
+display current-configuration
+
+
+# ============================================
+# 故障排查命令
+# ============================================
+
+# 查看SSH会话
+display ssh server session
+
+# 查看在线用户
+display users
+
+# 查看接口统计
+display interface GigabitEthernet 0/0/1
+
+# 查看路由表
+display ip routing-table
+
+# 查看ARP表
+display arp
+
+# 调试SSH（谨慎使用）
+debugging ssh server
+
+# 取消调试
+undo debugging all
+
+# ============================================
+# 重置配置（如果需要）
+# ============================================
+
+# 恢复出厂设置
+reset saved-configuration
+# 重启设备
+reboot
+
+
+system-view
+sysname AR1
+
+# 配置接口
+interface GigabitEthernet 0/0/0
+ ip address 192.168.10.1 255.255.255.0
+ undo shutdown
+ quit
+
+# 启用SSH
+stelnet server enable
+rsa local-key-pair create
+
+# 配置AAA（包含密码策略）
+aaa
+ local-user admin password irreversible-cipher admin@123
+ local-user admin service-type ssh telnet terminal
+ local-user admin privilege level 15
+ quit
+
+# 配置VTY
+user-interface vty 0 4
+ authentication-mode aaa
+ protocol inbound ssh telnet
+ user privilege level 15
+ quit
+
+# 保存配置
+qu

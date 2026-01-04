@@ -1,0 +1,26 @@
+2025-12-02 08:11:07,174 - [INFO] - Device-192.168.10.1 - 正在连接到 192.168.10.1:22
+2025-12-02 08:11:08,067 - [INFO] - Device-192.168.10.1 - SSH 连接建立成功
+2025-12-02 08:11:08,067 - [INFO] - Device-192.168.10.1 - Execute: system-view
+2025-12-02 08:11:08,269 - [INFO] - Device-192.168.10.1 - Execute: display version
+2025-12-02 08:11:09,068 - [INFO] - Device-192.168.10.1 - Execute: display interface brief
+2025-12-02 08:11:09,489 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 28. Input Line: [AR1000v]
+2025-12-02 08:14:33,397 - [INFO] - Device-192.168.10.1 - 正在连接到 192.168.10.1:22
+2025-12-02 08:14:34,319 - [INFO] - Device-192.168.10.1 - SSH 连接建立成功
+2025-12-02 08:14:34,319 - [INFO] - Device-192.168.10.1 - Execute: system-view
+2025-12-02 08:14:34,522 - [INFO] - Device-192.168.10.1 - Execute: display version
+2025-12-02 08:14:35,313 - [INFO] - Device-192.168.10.1 - Execute: display interface brief
+2025-12-02 08:16:20,244 - [INFO] - Device-192.168.10.1 - 正在连接到 192.168.10.1:22
+2025-12-02 08:16:21,340 - [INFO] - Device-192.168.10.1 - SSH 连接建立成功
+2025-12-02 08:16:21,340 - [INFO] - Device-192.168.10.1 - Execute: system-view
+2025-12-02 08:16:21,543 - [INFO] - Device-192.168.10.1 - Execute: display version
+2025-12-02 08:16:22,345 - [INFO] - Device-192.168.10.1 - Execute: display interface brief
+2025-12-02 08:17:23,838 - [INFO] - Device-192.168.10.1 - 正在连接到 192.168.10.1:22
+2025-12-02 08:17:24,620 - [INFO] - Device-192.168.10.1 - SSH 连接建立成功
+2025-12-02 08:17:24,620 - [INFO] - Device-192.168.10.1 - Execute: system-view
+2025-12-02 08:17:24,823 - [INFO] - Device-192.168.10.1 - Execute: display version
+2025-12-02 08:17:25,647 - [INFO] - Device-192.168.10.1 - Execute: display interface brief
+2025-12-02 08:19:08,820 - [INFO] - Device-192.168.10.1 - 正在连接到 192.168.10.1:22
+2025-12-02 08:19:09,714 - [INFO] - Device-192.168.10.1 - SSH 连接建立成功
+2025-12-02 08:19:09,714 - [INFO] - Device-192.168.10.1 - Execute: system-view
+2025-12-02 08:19:09,917 - [INFO] - Device-192.168.10.1 - Execute: display version
+2025-12-02 08:19:10,701 - [INFO] - Device-192.168.10.1 - Execute: display interface brief

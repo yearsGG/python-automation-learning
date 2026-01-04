@@ -1,0 +1,32 @@
+2025-12-02 07:53:12,211 - [INFO] - Device-192.168.10.1 - 正在连接到 192.168.10.1:22
+2025-12-02 07:53:13,193 - [INFO] - Device-192.168.10.1 - SSH 连接建立成功
+2025-12-02 07:53:13,193 - [INFO] - Device-192.168.10.1 - Execute: system-view
+2025-12-02 07:53:13,395 - [INFO] - Device-192.168.10.1 - Execute: display version
+2025-12-02 07:55:29,889 - [INFO] - Device-192.168.10.1 - 正在连接到 192.168.10.1:22
+2025-12-02 07:55:30,785 - [INFO] - Device-192.168.10.1 - SSH 连接建立成功
+2025-12-02 07:55:30,786 - [INFO] - Device-192.168.10.1 - Execute: system-view
+2025-12-02 07:55:30,988 - [INFO] - Device-192.168.10.1 - Execute: display version
+2025-12-02 08:01:53,285 - [INFO] - Device-192.168.10.1 - 正在连接到 192.168.10.1:22
+2025-12-02 08:01:54,227 - [INFO] - Device-192.168.10.1 - SSH 连接建立成功
+2025-12-02 08:01:54,227 - [INFO] - Device-192.168.10.1 - Execute: system-view
+2025-12-02 08:01:54,430 - [INFO] - Device-192.168.10.1 - Execute: display version
+2025-12-02 08:01:55,208 - [INFO] - Device-192.168.10.1 - Execute: huawei vrp display version
+2025-12-02 08:01:55,518 - [ERROR] - Device-192.168.10.1 - 解析失败: Unable to parse command "huawei vrp display version" on platform huawei_vrp - No template found for attributes: "{'Command': 'huawei vrp display version', 'Platform': 'huawei_vrp'}"
+2025-12-02 08:05:52,381 - [INFO] - Device-192.168.10.1 - 正在连接到 192.168.10.1:22
+2025-12-02 08:05:53,323 - [INFO] - Device-192.168.10.1 - SSH 连接建立成功
+2025-12-02 08:05:53,324 - [INFO] - Device-192.168.10.1 - Execute: system-view
+2025-12-02 08:05:53,526 - [INFO] - Device-192.168.10.1 - Execute: display version
+2025-12-02 08:05:54,408 - [INFO] - Device-192.168.10.1 - Execute: display acl all
+2025-12-02 08:05:54,733 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 27. Input Line: [AR1000v]
+2025-12-02 08:06:49,976 - [INFO] - Device-192.168.10.1 - 正在连接到 192.168.10.1:22
+2025-12-02 08:06:50,964 - [INFO] - Device-192.168.10.1 - SSH 连接建立成功
+2025-12-02 08:06:50,964 - [INFO] - Device-192.168.10.1 - Execute: system-view
+2025-12-02 08:06:51,167 - [INFO] - Device-192.168.10.1 - Execute: display version
+2025-12-02 08:06:52,061 - [INFO] - Device-192.168.10.1 - Execute: dir
+2025-12-02 08:06:52,276 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 14. Input Line: ^
+2025-12-02 08:08:03,926 - [INFO] - Device-192.168.10.1 - 正在连接到 192.168.10.1:22
+2025-12-02 08:08:04,797 - [INFO] - Device-192.168.10.1 - SSH 连接建立成功
+2025-12-02 08:08:04,798 - [INFO] - Device-192.168.10.1 - Execute: system-view
+2025-12-02 08:08:05,000 - [INFO] - Device-192.168.10.1 - Execute: display version
+2025-12-02 08:08:05,777 - [INFO] - Device-192.168.10.1 - Execute: display interface brief
+2025-12-02 08:08:06,200 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 28. Input Line: [AR1000v]
