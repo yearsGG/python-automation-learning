@@ -8,4 +8,11 @@ __pycache__/
 .vscode/
 
 # Logs
-log/
+log/ntc-templates_backup/
+__pycache__/
+*.pyc
+*.log
+*.db
+venv/
+src/fix_index.py
+src/fix_template.py

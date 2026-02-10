@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <title>网络设备自动化运维平台</title>
+    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body { padding: 20px; background-color: #f0f2f5; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        .card { box-shadow: 0 4px 6px rgba(0,0,0,0.1); border: none; border-radius: 10px; }
+        .card-header { background-color: #fff; border-bottom: 1px solid #eee; padding: 15px 20px; font-weight: bold; border-radius: 10px 10px 0 0 !important; }
+        .status-badge { font-size: 0.9em; padding: 5px 10px; }
+        .nav-tabs .nav-link { color: #495057; }
+        .nav-tabs .nav-link.active { font-weight: bold; color: #0d6efd; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="d-flex align-items-center mb-4">
+            <h2 class="me-auto">🚀 网络设备自动化运维平台</h2>
+            <span class="badge bg-secondary">毕业设计 v1.0</span>
+        </div>
+
+        <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
+            <li class="nav-item" role="presentation">
+                <button class="nav-link active" id="scan-tab" data-bs-toggle="tab" data-bs-target="#scan-pane" type="button" role="tab">
+                    ⚡ 实时巡检
+                </button>
+            </li>
+            <li class="nav-item" role="presentation">
+                <button class="nav-link" id="history-tab" data-bs-toggle="tab" data-bs-target="#history-pane" type="button" role="tab" onclick="loadHistory()">
+                    📜 历史记录
+                </button>
+            </li>
+        </ul>
+
+        <div class="tab-content" id="myTabContent">
+            
+            <div class="tab-pane fade show active" id="scan-pane" role="tabpanel">
+                <div class="card">
+                    <div class="card-header text-primary">
+                        设备: AR1000v (192.168.10.1)
+                    </div>
+                    <div class="card-body">
+                        <button id="btn-scan" class="btn btn-primary" onclick="startScan()">
+                            <span id="spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
+                            开始接口巡检
+                        </button>
+                        <span id="status-text" class="ms-3 text-muted">点击按钮开始采集数据...</span>
+
+                        <div class="mt-4 table-responsive">
+                            <table class="table table-hover align-middle" id="result-table" style="display:none;">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>接口名称</th>
+                                        <th>IP 地址</th>
+                                        <th>物理状态</th>
+                                        <th>协议状态</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="table-body">
+                                    </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="tab-pane fade" id="history-pane" role="tabpanel">
+                <div class="card">
+                    <div class="card-header text-secondary">
+                        最近巡检记录 (数据库: netops.db)
+                    </div>
+                    <div class="card-body">
+                        <button class="btn btn-sm btn-outline-secondary mb-3" onclick="loadHistory()">🔄 刷新列表</button>
+                        <div class="table-responsive">
+                            <table class="table table-striped table-hover">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>时间</th>
+                                        <th>设备 IP</th>
+                                        <th>执行命令</th>
+                                        <th>状态</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="history-body">
+                                    </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.1/js/bootstrap.bundle.min.js"></script>
+    
+    <script>
+        // --- 功能 1: 实时巡检 ---
+        function startScan() {
+            const btn = document.getElementById('btn-scan');
+            const spinner = document.getElementById('spinner');
+            const status = document.getElementById('status-text');
+            const table = document.getElementById('result-table');
+            const tbody = document.getElementById('table-body');
+
+            // 锁定按钮 UI
+            btn.disabled = true;
+            spinner.classList.remove('d-none');
+            btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> 正在巡检中...';
+            status.innerText = "正在连接设备并采集数据，请稍候...";
+            tbody.innerHTML = "";
+            table.style.display = 'none';
+
+            // 请求后端 API
+            fetch('/api/scan/interfaces')
+                .then(response => response.json())
+                .then(res => {
+                    if (res.status === 'success') {
+                        // 渲染表格
+                        res.data.forEach(row => {
+                            const tr = document.createElement('tr');
+                            // 简单的状态颜色判断
+                            const phyClass = row.physical && row.physical.toLowerCase().includes('up') ? 'text-success fw-bold' : 'text-danger';
+                            
+                            tr.innerHTML = `
+                                <td>${row.interface || '-'}</td>
+                                <td>${row.ip_address || '-'}</td>
+                                <td class="${phyClass}">${row.physical || '-'}</td>
+                                <td>${row.protocol || '-'}</td>
+                            `;
+                            tbody.appendChild(tr);
+                        });
+                        table.style.display = 'table';
+                        status.innerHTML = `<span class="text-success">✅ 巡检完成! 共发现 ${res.data.length} 个接口</span>`;
+                    } else {
+                        alert("巡检失败: " + res.message);
+                        status.innerHTML = `<span class="text-danger">❌ 发生错误: ${res.message}</span>`;
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    alert("网络请求失败");
+                    status.innerText = "网络请求失败";
+                })
+                .finally(() => {
+                    // 恢复按钮
+                    btn.disabled = false;
+                    btn.innerHTML = '开始接口巡检';
+                });
+        }
+
+        // --- 功能 2: 加载历史记录 ---
+        function loadHistory() {
+            const tbody = document.getElementById('history-body');
+            tbody.innerHTML = '<tr><td colspan="5" class="text-center">正在加载数据...</td></tr>';
+
+            fetch('/api/history')
+                .then(response => response.json())
+                .then(res => {
+                    tbody.innerHTML = ""; // 清空
+                    if (res.data && res.data.length > 0) {
+                        res.data.forEach(log => {
+                            const tr = document.createElement('tr');
+                            const statusBadge = log.status === 'success' 
+                                ? '<span class="badge bg-success">成功</span>' 
+                                : '<span class="badge bg-danger">失败</span>';
+                            
+                            tr.innerHTML = `
+                                <td>${log.id}</td>
+                                <td>${log.timestamp}</td>
+                                <td>${log.device_ip}</td>
+                                <td><code>${log.command}</code></td>
+                                <td>${statusBadge}</td>
+                            `;
+                            tbody.appendChild(tr);
+                        });
+                    } else {
+                        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">暂无历史记录</td></tr>';
+                    }
+                })
+                .catch(err => {
+                    console.error(err);
+                    tbody.innerHTML = '<tr><td colspan="5" class="text-center text-danger">加载失败</td></tr>';
+                });
+        }
+    </script>
+</body>
+</html>

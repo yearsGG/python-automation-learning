@@ -30,3 +30,217 @@
 2025-12-02 08:08:05,000 - [INFO] - Device-192.168.10.1 - Execute: display version
 2025-12-02 08:08:05,777 - [INFO] - Device-192.168.10.1 - Execute: display interface brief
 2025-12-02 08:08:06,200 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 28. Input Line: [AR1000v]
+2026-02-09 03:12:51,213 - [INFO] - Device-192.168.10.1 - 正在连接到 192.168.10.1:22
+2026-02-09 03:12:52,081 - [INFO] - Device-192.168.10.1 - SSH 连接建立成功
+2026-02-09 03:12:52,082 - [INFO] - Device-192.168.10.1 - Execute: system-view
+2026-02-09 03:12:52,285 - [INFO] - Device-192.168.10.1 - Execute: display interface brief
+2026-02-09 03:24:32,432 - [INFO] - Device-192.168.10.1 - 正在连接到 192.168.10.1:22
+2026-02-09 03:24:33,440 - [INFO] - Device-192.168.10.1 - SSH 连接建立成功
+2026-02-09 03:24:33,440 - [INFO] - Device-192.168.10.1 - Execute: system-view
+2026-02-09 03:24:33,642 - [INFO] - Device-192.168.10.1 - Execute: display version
+2026-02-09 03:24:34,521 - [INFO] - Device-192.168.10.1 - Execute: display device
+2026-02-09 03:24:34,940 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 29. Input Line: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2026-02-09 03:24:34,941 - [INFO] - Device-192.168.10.1 - Execute: display interface brief
+2026-02-09 03:24:35,565 - [INFO] - Device-192.168.10.1 - Execute: display vlan
+2026-02-09 03:24:35,806 - [INFO] - Device-192.168.10.1 - Execute: display arp all
+2026-02-09 03:24:36,125 - [INFO] - Device-192.168.10.1 - Execute: display mac-address
+2026-02-09 03:24:36,642 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 12. Input Line: ^
+2026-02-09 03:24:36,642 - [INFO] - Device-192.168.10.1 - Execute: display lldp neighbor
+2026-02-09 03:24:37,116 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 196. Input Line: ^
+2026-02-09 03:24:37,117 - [INFO] - Device-192.168.10.1 - Execute: display ip routing-table verbose
+2026-02-09 03:24:38,160 - [INFO] - Device-192.168.10.1 - Execute: dir
+2026-02-09 03:24:38,275 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 14. Input Line: ^
+2026-02-09 03:24:38,275 - [INFO] - Device-192.168.10.1 - Execute: display acl all
+2026-02-09 03:28:42,210 - [INFO] - Device-192.168.10.1 - 正在连接到 192.168.10.1:22
+2026-02-09 03:28:43,022 - [INFO] - Device-192.168.10.1 - SSH 连接建立成功
+2026-02-09 03:28:43,023 - [INFO] - Device-192.168.10.1 - Execute: system-view
+2026-02-09 03:28:43,225 - [INFO] - Device-192.168.10.1 - Execute: display version
+2026-02-09 03:28:44,106 - [INFO] - Device-192.168.10.1 - Execute: display device
+2026-02-09 03:28:44,424 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 29. Input Line: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2026-02-09 03:28:44,424 - [INFO] - Device-192.168.10.1 - Execute: display startup
+2026-02-09 03:28:44,747 - [INFO] - Device-192.168.10.1 - Execute: display clock
+2026-02-09 03:28:45,062 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 14. Input Line: 2017-01-01 00:24:29
+2026-02-09 03:28:45,062 - [INFO] - Device-192.168.10.1 - Execute: display fan
+2026-02-09 03:28:45,271 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 14. Input Line: ^
+2026-02-09 03:28:45,272 - [INFO] - Device-192.168.10.1 - Execute: display power
+2026-02-09 03:28:45,582 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 14. Input Line: ^
+2026-02-09 03:28:45,582 - [INFO] - Device-192.168.10.1 - Execute: display temperature all
+2026-02-09 03:28:45,890 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 14. Input Line: ^
+2026-02-09 03:28:45,891 - [INFO] - Device-192.168.10.1 - Execute: display sn license
+2026-02-09 03:28:46,202 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 6. Input Line: ^
+2026-02-09 03:28:46,203 - [INFO] - Device-192.168.10.1 - Execute: display patch-information
+2026-02-09 03:28:46,517 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 11. Input Line: Info: No patch exists.
+2026-02-09 03:28:46,517 - [INFO] - Device-192.168.10.1 - Execute: dir
+2026-02-09 03:28:46,626 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 14. Input Line: ^
+2026-02-09 03:28:46,627 - [INFO] - Device-192.168.10.1 - Execute: display interface brief
+2026-02-09 03:28:47,149 - [INFO] - Device-192.168.10.1 - Execute: display interface
+2026-02-09 03:28:50,124 - [INFO] - Device-192.168.10.1 - Execute: display interface description
+2026-02-09 03:28:50,636 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 18. Input Line:                                                t0/0/0 Interface
+2026-02-09 03:28:50,637 - [INFO] - Device-192.168.10.1 - Execute: display ip interface brief
+2026-02-09 03:28:51,147 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 14. Input Line: *down: administratively down
+2026-02-09 03:28:51,148 - [INFO] - Device-192.168.10.1 - Execute: display eth-trunk
+2026-02-09 03:28:51,577 - [INFO] - Device-192.168.10.1 - Execute: display ip routing-table verbose
+2026-02-09 03:28:52,820 - [INFO] - Device-192.168.10.1 - Execute: display arp all
+2026-02-09 03:28:53,036 - [INFO] - Device-192.168.10.1 - Execute: display arp brief
+2026-02-09 03:28:53,362 - [INFO] - Device-192.168.10.1 - Execute: display lldp neighbor
+2026-02-09 03:28:53,724 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 196. Input Line: ^
+2026-02-09 03:28:53,724 - [INFO] - Device-192.168.10.1 - Execute: display ipv6 neighbors
+2026-02-09 03:28:54,045 - [INFO] - Device-192.168.10.1 - Execute: display vlan
+2026-02-09 03:28:54,383 - [INFO] - Device-192.168.10.1 - Execute: display vlan brief
+2026-02-09 03:28:54,696 - [INFO] - Device-192.168.10.1 - Execute: display port vlan
+2026-02-09 03:28:55,058 - [INFO] - Device-192.168.10.1 - Execute: display mac-address
+2026-02-09 03:28:55,373 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 12. Input Line: ^
+2026-02-09 03:28:55,373 - [INFO] - Device-192.168.10.1 - Execute: display acl all
+2026-02-09 03:28:55,699 - [INFO] - Device-192.168.10.1 - Execute: display nat server
+2026-02-09 03:28:56,021 - [INFO] - Device-192.168.10.1 - Execute: display traffic-filter applied-record
+2026-02-09 03:28:56,434 - [INFO] - Device-192.168.10.1 - Execute: display service-set all
+2026-02-09 03:28:56,746 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 10. Input Line: ^
+2026-02-09 03:28:56,747 - [INFO] - Device-192.168.10.1 - Execute: display ap all
+2026-02-09 03:28:56,967 - [INFO] - Device-192.168.10.1 - Execute: display bgp peer
+2026-02-09 03:28:57,284 - [INFO] - Device-192.168.10.1 - Execute: display isis peer
+2026-02-09 03:28:57,503 - [INFO] - Device-192.168.10.1 - Execute: display mpls te tunnel
+2026-02-09 03:28:57,819 - [INFO] - Device-192.168.10.1 - Execute: display ntp-service status
+2026-02-09 03:28:58,133 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 14. Input Line: clock status: unsynchronized 
+2026-02-09 03:28:58,134 - [INFO] - Device-192.168.10.1 - Execute: display telnet server status
+2026-02-09 03:28:58,547 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 16. Input Line: TELNET IPV4 server                      :Disable
+2026-02-09 03:28:58,548 - [INFO] - Device-192.168.10.1 - Execute: display http server
+2026-02-09 03:28:58,871 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 29. Input Line: HTTP server status              : Disabled       (default: disable)
+2026-02-09 03:28:58,871 - [INFO] - Device-192.168.10.1 - Execute: display snmp-agent community read
+2026-02-09 03:28:59,287 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 16. Input Line: Error: SNMP Agent disabled 
+2026-02-09 03:29:45,793 - [INFO] - Device-192.168.10.1 - 正在连接到 192.168.10.1:22
+2026-02-09 03:29:46,897 - [INFO] - Device-192.168.10.1 - SSH 连接建立成功
+2026-02-09 03:29:46,897 - [INFO] - Device-192.168.10.1 - Execute: system-view
+2026-02-09 03:29:47,100 - [INFO] - Device-192.168.10.1 - Execute: display version
+2026-02-09 03:41:06,058 - [INFO] - Device-192.168.10.1 - 正在连接到 192.168.10.1:22
+2026-02-09 03:41:07,044 - [INFO] - Device-192.168.10.1 - SSH 连接建立成功
+2026-02-09 03:41:07,044 - [INFO] - Device-192.168.10.1 - Execute: system-view
+2026-02-09 03:41:07,347 - [INFO] - Device-192.168.10.1 - Execute: display version
+2026-02-09 03:41:19,697 - [INFO] - Device-192.168.10.1 - 正在连接到 192.168.10.1:22
+2026-02-09 03:41:20,686 - [INFO] - Device-192.168.10.1 - SSH 连接建立成功
+2026-02-09 03:41:20,686 - [INFO] - Device-192.168.10.1 - Execute: system-view
+2026-02-09 03:41:20,889 - [INFO] - Device-192.168.10.1 - Execute: display version
+2026-02-09 03:41:21,879 - [INFO] - Device-192.168.10.1 - Execute: display device
+2026-02-09 03:41:22,198 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 29. Input Line: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2026-02-09 03:41:22,198 - [INFO] - Device-192.168.10.1 - Execute: display startup
+2026-02-09 03:41:22,617 - [INFO] - Device-192.168.10.1 - Execute: display clock
+2026-02-09 03:41:22,932 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 14. Input Line: 2017-01-01 00:37:07
+2026-02-09 03:41:22,933 - [INFO] - Device-192.168.10.1 - Execute: display fan
+2026-02-09 03:41:23,142 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 14. Input Line: ^
+2026-02-09 03:41:23,142 - [INFO] - Device-192.168.10.1 - Execute: display power
+2026-02-09 03:41:23,452 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 14. Input Line: ^
+2026-02-09 03:41:23,452 - [INFO] - Device-192.168.10.1 - Execute: display temperature all
+2026-02-09 03:41:23,766 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 14. Input Line: ^
+2026-02-09 03:41:23,766 - [INFO] - Device-192.168.10.1 - Execute: display sn license
+2026-02-09 03:41:23,976 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 6. Input Line: ^
+2026-02-09 03:41:23,976 - [INFO] - Device-192.168.10.1 - Execute: display patch-information
+2026-02-09 03:41:24,389 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 11. Input Line: Info: No patch exists.
+2026-02-09 03:41:24,389 - [INFO] - Device-192.168.10.1 - Execute: dir
+2026-02-09 03:41:24,498 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 14. Input Line: ^
+2026-02-09 03:41:24,499 - [INFO] - Device-192.168.10.1 - Execute: display interface brief
+2026-02-09 03:41:25,022 - [INFO] - Device-192.168.10.1 - Execute: display interface
+2026-02-09 03:41:28,093 - [INFO] - Device-192.168.10.1 - Execute: display interface description
+2026-02-09 03:41:28,607 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 18. Input Line:                                                t0/0/0 Interface
+2026-02-09 03:41:28,608 - [INFO] - Device-192.168.10.1 - Execute: display ip interface brief
+2026-02-09 03:41:29,218 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 14. Input Line: *down: administratively down
+2026-02-09 03:41:29,219 - [INFO] - Device-192.168.10.1 - Execute: display eth-trunk
+2026-02-09 03:41:29,645 - [INFO] - Device-192.168.10.1 - Execute: display ip routing-table verbose
+2026-02-09 03:41:30,786 - [INFO] - Device-192.168.10.1 - Execute: display arp all
+2026-02-09 03:41:31,104 - [INFO] - Device-192.168.10.1 - Execute: display arp brief
+2026-02-09 03:41:31,423 - [INFO] - Device-192.168.10.1 - Execute: display lldp neighbor
+2026-02-09 03:41:31,884 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 196. Input Line: ^
+2026-02-09 03:41:31,884 - [INFO] - Device-192.168.10.1 - Execute: display ipv6 neighbors
+2026-02-09 03:41:32,206 - [INFO] - Device-192.168.10.1 - Execute: display vlan
+2026-02-09 03:41:32,544 - [INFO] - Device-192.168.10.1 - Execute: display vlan brief
+2026-02-09 03:41:32,958 - [INFO] - Device-192.168.10.1 - Execute: display port vlan
+2026-02-09 03:41:33,320 - [INFO] - Device-192.168.10.1 - Execute: display mac-address
+2026-02-09 03:41:33,634 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 12. Input Line: ^
+2026-02-09 03:41:33,634 - [INFO] - Device-192.168.10.1 - Execute: display acl all
+2026-02-09 03:41:33,961 - [INFO] - Device-192.168.10.1 - Execute: display nat server
+2026-02-09 03:41:34,277 - [INFO] - Device-192.168.10.1 - Execute: display traffic-filter applied-record
+2026-02-09 03:41:34,693 - [INFO] - Device-192.168.10.1 - Execute: display service-set all
+2026-02-09 03:41:35,005 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 10. Input Line: ^
+2026-02-09 03:41:35,005 - [INFO] - Device-192.168.10.1 - Execute: display ap all
+2026-02-09 03:41:35,323 - [INFO] - Device-192.168.10.1 - Execute: display bgp peer
+2026-02-09 03:41:35,538 - [INFO] - Device-192.168.10.1 - Execute: display isis peer
+2026-02-09 03:41:35,855 - [INFO] - Device-192.168.10.1 - Execute: display mpls te tunnel
+2026-02-09 03:41:36,163 - [INFO] - Device-192.168.10.1 - Execute: display ntp-service status
+2026-02-09 03:41:36,577 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 14. Input Line: clock status: unsynchronized 
+2026-02-09 03:41:36,578 - [INFO] - Device-192.168.10.1 - Execute: display telnet server status
+2026-02-09 03:41:36,992 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 16. Input Line: TELNET IPV4 server                      :Disable
+2026-02-09 03:41:36,992 - [INFO] - Device-192.168.10.1 - Execute: display http server
+2026-02-09 03:41:37,313 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 29. Input Line: HTTP server status              : Disabled       (default: disable)
+2026-02-09 03:41:37,314 - [INFO] - Device-192.168.10.1 - Execute: display snmp-agent community read
+2026-02-09 03:58:13,570 - [INFO] - Device-192.168.10.1 - 正在连接到 192.168.10.1:22
+2026-02-09 03:58:14,514 - [INFO] - Device-192.168.10.1 - SSH 连接建立成功
+2026-02-09 03:58:14,515 - [INFO] - Device-192.168.10.1 - Execute: system-view
+2026-02-09 03:58:14,720 - [INFO] - Device-192.168.10.1 - Execute: display version
+2026-02-09 03:58:15,618 - [INFO] - Device-192.168.10.1 - Execute: display device
+2026-02-09 03:58:16,037 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 29. Input Line: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -
+2026-02-09 03:58:16,037 - [INFO] - Device-192.168.10.1 - Execute: display startup
+2026-02-09 03:58:16,459 - [INFO] - Device-192.168.10.1 - Execute: display clock
+2026-02-09 03:58:16,773 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 14. Input Line: 2017-01-01 00:54:01
+2026-02-09 03:58:16,774 - [INFO] - Device-192.168.10.1 - Execute: display fan
+2026-02-09 03:58:16,983 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 14. Input Line: ^
+2026-02-09 03:58:16,984 - [INFO] - Device-192.168.10.1 - Execute: display power
+2026-02-09 03:58:17,294 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 14. Input Line: ^
+2026-02-09 03:58:17,294 - [INFO] - Device-192.168.10.1 - Execute: display temperature all
+2026-02-09 03:58:17,609 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 14. Input Line: ^
+2026-02-09 03:58:17,609 - [INFO] - Device-192.168.10.1 - Execute: display sn license
+2026-02-09 03:58:17,919 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 6. Input Line: ^
+2026-02-09 03:58:17,919 - [INFO] - Device-192.168.10.1 - Execute: display patch-information
+2026-02-09 03:58:18,332 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 11. Input Line: Info: No patch exists.
+2026-02-09 03:58:18,332 - [INFO] - Device-192.168.10.1 - Execute: dir
+2026-02-09 03:58:18,440 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 14. Input Line: ^
+2026-02-09 03:58:18,440 - [INFO] - Device-192.168.10.1 - Execute: display interface brief
+2026-02-09 03:58:19,064 - [INFO] - Device-192.168.10.1 - Execute: display interface
+2026-02-09 03:58:22,539 - [INFO] - Device-192.168.10.1 - Execute: display interface description
+2026-02-09 03:58:23,053 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 18. Input Line:                                                t0/0/0 Interface
+2026-02-09 03:58:23,054 - [INFO] - Device-192.168.10.1 - Execute: display ip interface brief
+2026-02-09 03:58:23,564 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 14. Input Line: *down: administratively down
+2026-02-09 03:58:23,565 - [INFO] - Device-192.168.10.1 - Execute: display eth-trunk
+2026-02-09 03:58:23,992 - [INFO] - Device-192.168.10.1 - Execute: display ip routing-table verbose
+2026-02-09 03:58:25,233 - [INFO] - Device-192.168.10.1 - Execute: display arp all
+2026-02-09 03:58:25,549 - [INFO] - Device-192.168.10.1 - Execute: display arp brief
+2026-02-09 03:58:25,867 - [INFO] - Device-192.168.10.1 - Execute: display lldp neighbor
+2026-02-09 03:58:26,230 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 196. Input Line: ^
+2026-02-09 03:58:26,231 - [INFO] - Device-192.168.10.1 - Execute: display ipv6 neighbors
+2026-02-09 03:58:26,548 - [INFO] - Device-192.168.10.1 - Execute: display vlan
+2026-02-09 03:58:26,885 - [INFO] - Device-192.168.10.1 - Execute: display vlan brief
+2026-02-09 03:58:27,201 - [INFO] - Device-192.168.10.1 - Execute: display port vlan
+2026-02-09 03:58:27,562 - [INFO] - Device-192.168.10.1 - Execute: display mac-address
+2026-02-09 03:58:27,877 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 12. Input Line: ^
+2026-02-09 03:58:27,877 - [INFO] - Device-192.168.10.1 - Execute: display acl all
+2026-02-09 03:58:28,293 - [INFO] - Device-192.168.10.1 - Execute: display nat server
+2026-02-09 03:58:28,703 - [INFO] - Device-192.168.10.1 - Execute: display traffic-filter applied-record
+2026-02-09 03:58:29,312 - [INFO] - Device-192.168.10.1 - Execute: display service-set all
+2026-02-09 03:58:29,617 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 10. Input Line: ^
+2026-02-09 03:58:29,617 - [INFO] - Device-192.168.10.1 - Execute: display ap all
+2026-02-09 03:58:29,936 - [INFO] - Device-192.168.10.1 - Execute: display bgp peer
+2026-02-09 03:58:30,252 - [INFO] - Device-192.168.10.1 - Execute: display isis peer
+2026-02-09 03:58:30,467 - [INFO] - Device-192.168.10.1 - Execute: display mpls te tunnel
+2026-02-09 03:58:30,881 - [INFO] - Device-192.168.10.1 - Execute: display ntp-service status
+2026-02-09 03:58:31,295 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 14. Input Line: clock status: unsynchronized 
+2026-02-09 03:58:31,295 - [INFO] - Device-192.168.10.1 - Execute: display telnet server status
+2026-02-09 03:58:31,802 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 16. Input Line: TELNET IPV4 server                      :Disable
+2026-02-09 03:58:31,802 - [INFO] - Device-192.168.10.1 - Execute: display http server
+2026-02-09 03:58:32,222 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 29. Input Line: HTTP server status              : Disabled       (default: disable)
+2026-02-09 03:58:32,222 - [INFO] - Device-192.168.10.1 - Execute: display snmp-agent community read
+2026-02-09 05:04:08,443 - [INFO] - Device-192.168.10.1 - 正在连接到 192.168.10.1:22
+2026-02-09 05:04:09,395 - [INFO] - Device-192.168.10.1 - SSH 连接建立成功
+2026-02-09 05:04:09,395 - [INFO] - Device-192.168.10.1 - Execute: system-view
+2026-02-09 05:04:09,599 - [INFO] - Device-192.168.10.1 - Execute: display version
+2026-02-09 05:04:10,493 - [INFO] - Device-192.168.10.1 - Execute: display startup
+2026-02-09 05:04:10,811 - [INFO] - Device-192.168.10.1 - Execute: display snmp-agent community read
+2026-02-09 05:04:11,322 - [INFO] - Device-192.168.10.1 - Execute: display interface brief
+2026-02-09 05:04:11,946 - [INFO] - Device-192.168.10.1 - Execute: display interface
+2026-02-09 05:04:15,519 - [INFO] - Device-192.168.10.1 - Execute: display eth-trunk
+2026-02-09 05:04:15,846 - [INFO] - Device-192.168.10.1 - Execute: display ip interface brief
+2026-02-09 05:04:16,461 - [ERROR] - Device-192.168.10.1 - 解析失败: State Error raised. Rule Line: 14. Input Line: *down: administratively down
+2026-02-09 05:04:16,462 - [INFO] - Device-192.168.10.1 - Execute: display ip routing-table verbose
+2026-02-09 05:04:18,709 - [INFO] - Device-192.168.10.1 - Execute: display arp all
+2026-02-09 05:04:19,228 - [INFO] - Device-192.168.10.1 - Execute: display vlan
+2026-02-09 05:04:19,666 - [INFO] - Device-192.168.10.1 - Execute: display vlan brief
+2026-02-09 05:04:20,080 - [INFO] - Device-192.168.10.1 - Execute: display acl all
+2026-02-09 05:04:20,404 - [INFO] - Device-192.168.10.1 - Execute: display nat server
+2026-02-09 05:04:20,721 - [INFO] - Device-192.168.10.1 - Execute: display bgp peer
+2026-02-09 05:04:21,146 - [INFO] - Device-192.168.10.1 - Execute: display traffic-filter applied-record
