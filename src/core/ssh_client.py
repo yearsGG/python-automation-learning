@@ -287,6 +287,93 @@ class NetworkDevice:
         result += self.execute_command("y", expect_prompt=self.base_prompt)
         return result
 
+    def ping_test(self, target_ip, count=5, timeout=5, size=None):
+        """
+        通过设备执行ping测试
+        :param target_ip: 目标IP地址
+        :param count: ping包数量
+        :param timeout: 超时时间（秒）
+        :param size: ping包大小（可选）
+        :return: 解析后的ping结果
+        """
+        print(Fore.CYAN + f">>> 从设备 {self.host} 执行ping测试: {target_ip}")
+        self.logger.info(f"Ping test from {self.host} to {target_ip}")
+
+        # 构建ping命令 - 适配华为VRP系统语法
+        # 华为VRP的ping语法: ping [ -a source-ip | -c count | -h ttl | -i interface-name | -s packet-size | -t timeout ] *host
+        ping_cmd = f"ping {target_ip}"
+
+        # 添加包数量参数 (-c)
+        if count and count != 5:  # 默认是5，如果用户指定其他值则添加
+            ping_cmd = f"ping -c {count} {target_ip}"
+
+        # 如果同时有timeout参数，添加超时时间 (-t)
+        if timeout and timeout != 5:  # 默认是5秒
+            if count and count != 5:
+                ping_cmd = f"ping -c {count} -t {timeout} {target_ip}"
+            else:
+                ping_cmd = f"ping -t {timeout} {target_ip}"
+
+        # 只有count参数的默认情况
+        if not timeout or timeout == 5:
+            if count and count != 5:
+                ping_cmd = f"ping -c {count} {target_ip}"
+
+        # 最简单的形式 - 使用默认值
+        if count == 5 and (not timeout or timeout == 5):
+            ping_cmd = f"ping {target_ip}"
+
+        # 重新构建：华为VRP标准ping命令格式
+        ping_cmd = f"ping"
+        params = []
+
+        if count != 5:  # 如果不是默认值5
+            params.append(f"-c {count}")
+        if timeout != 5:  # 如果不是默认值5
+            params.append(f"-t {timeout}")  # 华为使用-t而非-w
+        if size:
+            params.append(f"-s {size}")
+
+        ping_cmd = f"ping {' '.join(params)} {target_ip}" if params else f"ping {target_ip}"
+
+        print(Fore.CYAN + f">>> 发送命令: {ping_cmd}")
+
+        # 执行ping命令
+        raw_output = self.execute_command(ping_cmd)
+
+        # 添加调试信息以查看实际的输出
+        print(Fore.YELLOW + f">>> 实际输出内容: {repr(raw_output)}")
+
+        # 使用新创建的ping模板解析结果
+        template_path = "/root/github/python-automation-learning/src/ntc-templates/ntc_templates/templates/huawei_vrp_ping.textfsm"
+
+        if not os.path.exists(template_path):
+            self.logger.error(f"Template not found: {template_path}")
+            # 如果模板不存在，返回原始输出
+            return {"error": f"Template not found: {template_path}", "raw_output": raw_output}
+
+        try:
+            # TextFSM 解析
+            with open(template_path, 'r', encoding='utf-8') as f:
+                re_table = textfsm.TextFSM(f)
+                result = re_table.ParseText(raw_output)
+                headers = re_table.header
+
+                # 强制转小写 (方便前端调用)
+                headers_lower = [h.lower() for h in headers]
+
+                # 组合成字典
+                parsed_data = [dict(zip(headers_lower, row)) for row in result]
+
+            print(Fore.GREEN + f"--- [解析] 成功解析 {len(parsed_data)} 条数据 (Template: {os.path.basename(template_path)}) ---")
+            return parsed_data
+
+        except Exception as e:
+            self.logger.error(f"TextFSM Parse Error: {e}")
+            print(Fore.RED + f"!!! 解析失败: {e}")
+            # 如果解析失败，返回原始输出
+            return {"error": f"Parsing error: {e}", "raw_output": raw_output}
+
     def close(self):
         if self.client:
             self.client.close()

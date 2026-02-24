@@ -205,6 +205,219 @@ def ping_all_devices():
 
     return jsonify({"status": "success", "data": results})
 
+@app.route('/api/ping/direct/<int:device_id>', methods=['POST'])
+def ping_direct(device_id):
+    """直接从服务器ping目标设备"""
+    device = get_device_by_id(device_id)
+    if not device:
+        return jsonify({"status": "error", "message": "Device not found"}), 404
+
+    try:
+        data = request.get_json() or {}
+        target_ip = data.get('target_ip', device['host'])  # 如果没有指定目标IP，则ping设备本身
+        count = data.get('count', 5)
+        timeout = data.get('timeout', 5)
+
+        import subprocess
+        result = subprocess.run(['ping', '-c', str(count), '-W', str(timeout), target_ip],
+                                stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+        is_reachable = result.returncode == 0
+
+        # 解析ping结果
+        ping_stats = {"target_ip": target_ip, "reachable": is_reachable}
+
+        if is_reachable:
+            # 解析输出获取详细统计信息
+            output = result.stdout
+            lines = output.split('\n')
+            for line in lines:
+                if "packets transmitted" in line:
+                    # Example: "2 packets transmitted, 2 received, 0% packet loss"
+                    import re
+                    match = re.search(r'(\d+) packets transmitted, (\d+) received, ([\d.]+)% packet loss', line)
+                    if match:
+                        ping_stats.update({
+                            "packets_transmitted": int(match.group(1)),
+                            "packets_received": int(match.group(2)),
+                            "packet_loss": float(match.group(3))
+                        })
+                elif "rtt" in line:
+                    # Example: "rtt min/avg/max/mdev = 1.123/1.456/1.789/0.123 ms"
+                    import re
+                    match = re.search(r'rtt min/avg/max/mdev = ([\d.]+)/([\d.]+)/([\d.]+)/', line)
+                    if match:
+                        ping_stats.update({
+                            "rtt_min": float(match.group(1)),
+                            "rtt_avg": float(match.group(2)),
+                            "rtt_max": float(match.group(3))
+                        })
+
+        return jsonify({
+            "status": "success",
+            "data": ping_stats
+        })
+
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": str(e),
+            "data": {"target_ip": target_ip, "reachable": False}
+        })
+
+@app.route('/api/ping/via-ssh/<int:device_id>', methods=['POST'])
+def ping_via_ssh(device_id):
+    """通过SSH连接在设备上执行ping测试"""
+    device = get_device_by_id(device_id)
+    if not device:
+        return jsonify({"status": "error", "message": "Device not found"}), 404
+
+    try:
+        data = request.get_json() or {}
+        target_ip = data.get('target_ip')
+        if not target_ip:
+            return jsonify({"status": "error", "message": "Target IP is required"}), 400
+
+        count = data.get('count', 5)
+        timeout = data.get('timeout', 5)
+        size = data.get('size', None)
+
+        with NetworkDevice(**{k: v for k, v in device.items() if k in ['host', 'username', 'password', 'port', 'device_type']}) as dev:
+            # 执行ping测试
+            ping_result = dev.ping_test(target_ip, count=count, timeout=timeout, size=size)
+
+            # 检查是否出错
+            if isinstance(ping_result, dict) and "error" in ping_result:
+                return jsonify({
+                    "status": "error",
+                    "message": ping_result["error"],
+                    "data": {"target_ip": target_ip, "reachable": False}
+                })
+
+            # 如果ping_result是空列表，说明没有解析到数据，但命令可能执行了
+            if not ping_result and isinstance(ping_result, list):
+                # 尝试返回原始输出
+                return jsonify({
+                    "status": "partial_success",
+                    "message": "Ping executed but no structured data parsed",
+                    "data": {"target_ip": target_ip, "reachable": False}
+                })
+
+            return jsonify({
+                "status": "success",
+                "data": {
+                    "target_ip": target_ip,
+                    "results": ping_result
+                }
+            })
+
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": str(e),
+            "data": {"target_ip": target_ip, "reachable": False}
+        })
+
+@app.route('/api/ping/batch', methods=['POST'])
+def ping_batch():
+    """批量ping测试"""
+    try:
+        data = request.get_json() or {}
+        targets = data.get('targets', [])
+        ping_method = data.get('method', 'direct')  # 'direct' or 'ssh'
+        device_id = data.get('device_id', None)  # Required for SSH method
+
+        if ping_method == 'ssh' and not device_id:
+            return jsonify({"status": "error", "message": "Device ID is required for SSH ping method"}), 400
+
+        results = []
+
+        for target in targets:
+            target_ip = target if isinstance(target, str) else target.get('ip', '')
+            target_name = target.get('name', target_ip) if isinstance(target, dict) else target_ip
+
+            if not target_ip:
+                results.append({
+                    'target': target_name,
+                    'target_ip': target_ip,
+                    'reachable': False,
+                    'error': 'Invalid target IP'
+                })
+                continue
+
+            if ping_method == 'direct':
+                # Direct ping from server
+                import subprocess
+                try:
+                    result = subprocess.run(['ping', '-c', '3', '-W', '5', target_ip],
+                                            stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+
+                    is_reachable = result.returncode == 0
+                    results.append({
+                        'target': target_name,
+                        'target_ip': target_ip,
+                        'reachable': is_reachable
+                    })
+                except Exception as e:
+                    results.append({
+                        'target': target_name,
+                        'target_ip': target_ip,
+                        'reachable': False,
+                        'error': str(e)
+                    })
+            elif ping_method == 'ssh' and device_id:
+                # SSH ping through device
+                device = get_device_by_id(device_id)
+                if not device:
+                    results.append({
+                        'target': target_name,
+                        'target_ip': target_ip,
+                        'reachable': False,
+                        'error': 'Device not found'
+                    })
+                    continue
+
+                try:
+                    with NetworkDevice(**{k: v for k, v in device.items() if k in ['host', 'username', 'password', 'port', 'device_type']}) as dev:
+                        ping_result = dev.ping_test(target_ip, count=3, timeout=5)
+
+                        if isinstance(ping_result, dict) and "error" in ping_result:
+                            results.append({
+                                'target': target_name,
+                                'target_ip': target_ip,
+                                'reachable': False,
+                                'error': ping_result.get('error', 'SSH ping failed')
+                            })
+                        else:
+                            is_reachable = len(ping_result) > 0 and float(ping_result[0].get('packet_loss', 100)) < 100  # Assume less than 100% loss means reachable
+                            results.append({
+                                'target': target_name,
+                                'target_ip': target_ip,
+                                'reachable': is_reachable,
+                                'rtt_min': ping_result[0].get('rtt_min') if ping_result else None,
+                                'rtt_avg': ping_result[0].get('rtt_avg') if ping_result else None,
+                                'rtt_max': ping_result[0].get('rtt_max') if ping_result else None
+                            })
+                except Exception as e:
+                    results.append({
+                        'target': target_name,
+                        'target_ip': target_ip,
+                        'reachable': False,
+                        'error': str(e)
+                    })
+
+        return jsonify({
+            "status": "success",
+            "data": results
+        })
+
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": str(e),
+            "data": []
+        })
+
 @app.route('/api/history')
 def api_history():
     """获取历史记录"""
@@ -247,4 +460,4 @@ if __name__ == '__main__':
     init_db()
 
     # 启动Flask应用
-    app.run(host='0.0.0.0', port=5001, debug=True)
+    app.run(host='0.0.0.0', port=5002, debug=True)

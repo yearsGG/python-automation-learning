@@ -1,0 +1,17 @@
+Value DEST_IP (\S+)
+Value PACKET_TRANSMITTED (\d+)
+Value PACKET_RECEIVED (\d+)
+Value PACKET_LOSS (\d+\.?\d*)
+Value RTT_MIN (\d+)
+Value RTT_AVG (\d+)
+Value RTT_MAX (\d+)
+
+Start
+  ^<.*>\s+ping(\s+-[a-zA-Z0-9]+)*\s+${DEST_IP}.*
+  ^\s*PING ${DEST_IP}:.*
+  ^\s*Reply from ${DEST_IP}:.*
+  ^\s*--- ${DEST_IP} ping statistics ---
+  ^\s*${PACKET_TRANSMITTED}\s+packet\(s\)\s+transmitted -> Continue
+  ^\s*${PACKET_RECEIVED}\s+packet\(s\)\s+received -> Continue
+  ^\s*${PACKET_LOSS}%\s+packet\s+loss -> Continue
+  ^\s*round-trip\s+min/avg/max\s+=\s+${RTT_MIN}/${RTT_AVG}/${RTT_MAX}\s+ms -> Record
