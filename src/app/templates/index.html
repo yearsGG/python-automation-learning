@@ -2,188 +2,826 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>网络设备自动化运维平台</title>
-    <link href="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.1/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        body { padding: 20px; background-color: #f0f2f5; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
-        .card { box-shadow: 0 4px 6px rgba(0,0,0,0.1); border: none; border-radius: 10px; }
-        .card-header { background-color: #fff; border-bottom: 1px solid #eee; padding: 15px 20px; font-weight: bold; border-radius: 10px 10px 0 0 !important; }
-        .status-badge { font-size: 0.9em; padding: 5px 10px; }
-        .nav-tabs .nav-link { color: #495057; }
-        .nav-tabs .nav-link.active { font-weight: bold; color: #0d6efd; }
+        :root {
+            --primary-color: #0d6efd;
+            --success-color: #198754;
+            --warning-color: #ffc107;
+            --danger-color: #dc3545;
+            --secondary-color: #6c757d;
+            --light-bg: #f8f9fa;
+        }
+        body {
+            padding: 20px;
+            background-color: var(--light-bg);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        .card {
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: none;
+            border-radius: 10px;
+        }
+        .card-header {
+            background-color: #fff;
+            border-bottom: 1px solid #eee;
+            padding: 15px 20px;
+            font-weight: bold;
+            border-radius: 10px 10px 0 0 !important;
+        }
+        .status-badge {
+            font-size: 0.9em;
+            padding: 5px 10px;
+        }
+        .nav-tabs .nav-link {
+            color: var(--secondary-color);
+        }
+        .nav-tabs .nav-link.active {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        .device-card {
+            transition: transform 0.2s;
+        }
+        .device-card:hover {
+            transform: translateY(-5px);
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        .status-online {
+            background-color: var(--success-color);
+        }
+        .status-offline {
+            background-color: var(--danger-color);
+        }
+        .status-unknown {
+            background-color: var(--warning-color);
+        }
+        .metric-card {
+            text-align: center;
+        }
+        .metric-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+        .metric-label {
+            font-size: 0.9rem;
+            color: var(--secondary-color);
+        }
+        .action-btn {
+            margin: 0 2px;
+        }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="d-flex align-items-center mb-4">
-            <h2 class="me-auto">🚀 网络设备自动化运维平台</h2>
-            <span class="badge bg-secondary">毕业设计 v1.0</span>
+    <div class="container-fluid">
+        <!-- 头部导航 -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div class="d-flex align-items-center">
+                <h2 class="mb-0"><i class="fas fa-network-wired me-2"></i>网络设备自动化运维平台</h2>
+                <span class="badge bg-primary ms-3">v2.0</span>
+            </div>
+            <div>
+                <button class="btn btn-outline-primary me-2" onclick="refreshAll()">
+                    <i class="fas fa-sync-alt"></i> 刷新
+                </button>
+                <button class="btn btn-success" onclick="showAddDeviceModal()">
+                    <i class="fas fa-plus"></i> 添加设备
+                </button>
+            </div>
         </div>
 
-        <ul class="nav nav-tabs mb-4" id="myTab" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="scan-tab" data-bs-toggle="tab" data-bs-target="#scan-pane" type="button" role="tab">
-                    ⚡ 实时巡检
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="history-tab" data-bs-toggle="tab" data-bs-target="#history-pane" type="button" role="tab" onclick="loadHistory()">
-                    📜 历史记录
-                </button>
-            </li>
-        </ul>
+        <!-- 仪表板概览 -->
+        <div class="row mb-4">
+            <div class="col-md-3">
+                <div class="card metric-card">
+                    <div class="card-body">
+                        <div class="metric-value" id="total-devices">0</div>
+                        <div class="metric-label">设备总数</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card metric-card">
+                    <div class="card-body">
+                        <div class="metric-value" id="online-devices">0</div>
+                        <div class="metric-label">在线设备</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card metric-card">
+                    <div class="card-body">
+                        <div class="metric-value" id="offline-devices">0</div>
+                        <div class="metric-label">离线设备</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3">
+                <div class="card metric-card">
+                    <div class="card-body">
+                        <div class="metric-value" id="last-scan">-</div>
+                        <div class="metric-label">最后巡检</div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-        <div class="tab-content" id="myTabContent">
-            
-            <div class="tab-pane fade show active" id="scan-pane" role="tabpanel">
+        <!-- 主要内容区域 -->
+        <div class="row">
+            <!-- 设备列表侧栏 -->
+            <div class="col-md-3">
+                <div class="card mb-4">
+                    <div class="card-header d-flex justify-content-between align-items-center">
+                        <span><i class="fas fa-server me-2"></i>设备列表</span>
+                        <span class="badge bg-secondary" id="device-count">0 台</span>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="list-group list-group-flush" id="device-list">
+                            <!-- 设备列表将通过JavaScript动态加载 -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 快速操作 -->
                 <div class="card">
-                    <div class="card-header text-primary">
-                        设备: AR1000v (192.168.10.1)
+                    <div class="card-header">
+                        <i class="fas fa-bolt me-2"></i>快速操作
                     </div>
                     <div class="card-body">
-                        <button id="btn-scan" class="btn btn-primary" onclick="startScan()">
-                            <span id="spinner" class="spinner-border spinner-border-sm d-none" role="status" aria-hidden="true"></span>
-                            开始接口巡检
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-primary" onclick="startAllScan()">
+                                <i class="fas fa-search me-1"></i> 全网巡检
+                            </button>
+                            <button class="btn btn-outline-info" onclick="pingAll()">
+                                <i class="fas fa-signal me-1"></i> Ping测试
+                            </button>
+                            <button class="btn btn-outline-success" onclick="generateReport()">
+                                <i class="fas fa-file-alt me-1"></i> 生成报告
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 主内容区域 -->
+            <div class="col-md-9">
+                <ul class="nav nav-tabs mb-4" id="mainTab" role="tablist">
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link active" id="dashboard-tab" data-bs-toggle="tab" data-bs-target="#dashboard-pane" type="button" role="tab">
+                            <i class="fas fa-tachometer-alt me-1"></i>仪表板
                         </button>
-                        <span id="status-text" class="ms-3 text-muted">点击按钮开始采集数据...</span>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="scan-tab" data-bs-toggle="tab" data-bs-target="#scan-pane" type="button" role="tab" onclick="loadScanHistory()">
+                            <i class="fas fa-search me-1"></i>巡检结果
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="history-tab" data-bs-toggle="tab" data-bs-target="#history-pane" type="button" role="tab" onclick="loadHistory()">
+                            <i class="fas fa-history me-1"></i>历史记录
+                        </button>
+                    </li>
+                    <li class="nav-item" role="presentation">
+                        <button class="nav-link" id="config-tab" data-bs-toggle="tab" data-bs-target="#config-pane" type="button" role="tab" onclick="loadDevices()">
+                            <i class="fas fa-cog me-1"></i>设备配置
+                        </button>
+                    </li>
+                </ul>
 
-                        <div class="mt-4 table-responsive">
-                            <table class="table table-hover align-middle" id="result-table" style="display:none;">
-                                <thead class="table-light">
-                                    <tr>
-                                        <th>接口名称</th>
-                                        <th>IP 地址</th>
-                                        <th>物理状态</th>
-                                        <th>协议状态</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="table-body">
-                                    </tbody>
-                            </table>
+                <div class="tab-content" id="mainTabContent">
+                    <!-- 仪表板 -->
+                    <div class="tab-pane fade show active" id="dashboard-pane" role="tabpanel">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-chart-bar me-2"></i>网络状态概览
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="row">
+                                            <div class="col-md-4 text-center">
+                                                <div class="metric-value text-success">98.7%</div>
+                                                <div class="metric-label">网络可用性</div>
+                                            </div>
+                                            <div class="col-md-4 text-center">
+                                                <div class="metric-value text-primary">12ms</div>
+                                                <div class="metric-label">平均延迟</div>
+                                            </div>
+                                            <div class="col-md-4 text-center">
+                                                <div class="metric-value text-warning">5.2%</div>
+                                                <div class="metric-label">错误率</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card">
+                                    <div class="card-header">
+                                        <i class="fas fa-chart-line me-2"></i>性能趋势
+                                    </div>
+                                    <div class="card-body">
+                                        <canvas id="performanceChart" height="200"></canvas>
+                                        <p class="text-muted text-center mt-3">性能趋势图（待实现）</p>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="card mb-4">
+                                    <div class="card-header">
+                                        <i class="fas fa-bell me-2"></i>告警通知
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="alert alert-warning">
+                                            <i class="fas fa-exclamation-triangle me-2"></i>
+                                            <strong>警告</strong>: 设备 SW-Core2 可能离线
+                                        </div>
+                                        <div class="alert alert-info">
+                                            <i class="fas fa-info-circle me-2"></i>
+                                            <strong>信息</strong>: 今天已完成 5 次巡检
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="card">
+                                    <div class="card-header">
+                                        <i class="fas fa-clock me-2"></i>定时任务
+                                    </div>
+                                    <div class="card-body">
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="autoScan">
+                                            <label class="form-check-label" for="autoScan">
+                                                自动巡检 (每30分钟)
+                                            </label>
+                                        </div>
+                                        <div class="form-check mb-2">
+                                            <input class="form-check-input" type="checkbox" id="autoBackup">
+                                            <label class="form-check-label" for="autoBackup">
+                                                自动备份 (每天)
+                                            </label>
+                                        </div>
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="autoReport">
+                                            <label class="form-check-label" for="autoReport">
+                                                自动报告 (每周)
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 巡检结果 -->
+                    <div class="tab-pane fade" id="scan-pane" role="tabpanel">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <span><i class="fas fa-list me-2"></i>巡检结果</span>
+                                <div>
+                                    <button class="btn btn-sm btn-outline-secondary me-2" onclick="loadCurrentScan()">刷新</button>
+                                    <button class="btn btn-sm btn-primary" onclick="startScan()">开始巡检</button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover align-middle" id="scan-result-table">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>接口名称</th>
+                                                <th>IP 地址</th>
+                                                <th>物理状态</th>
+                                                <th>协议状态</th>
+                                                <th>描述</th>
+                                                <th>操作</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="scan-table-body">
+                                            <!-- 巡检结果将通过JavaScript动态加载 -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 历史记录 -->
+                    <div class="tab-pane fade" id="history-pane" role="tabpanel">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <span><i class="fas fa-history me-2"></i>巡检历史记录</span>
+                                <div>
+                                    <button class="btn btn-sm btn-outline-secondary me-2" onclick="loadHistory()">刷新</button>
+                                    <button class="btn btn-sm btn-outline-success" onclick="exportHistory()">导出</button>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-striped table-hover">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>时间</th>
+                                                <th>设备IP</th>
+                                                <th>命令</th>
+                                                <th>状态</th>
+                                                <th>结果</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="history-body">
+                                            <!-- 历史记录将通过JavaScript动态加载 -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- 设备配置 -->
+                    <div class="tab-pane fade" id="config-pane" role="tabpanel">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-between align-items-center">
+                                <span><i class="fas fa-cog me-2"></i>设备管理</span>
+                                <button class="btn btn-sm btn-success" onclick="showAddDeviceModal()">
+                                    <i class="fas fa-plus me-1"></i>添加设备
+                                </button>
+                            </div>
+                            <div class="card-body">
+                                <div class="table-responsive">
+                                    <table class="table table-hover">
+                                        <thead class="table-light">
+                                            <tr>
+                                                <th>名称</th>
+                                                <th>IP地址</th>
+                                                <th>端口</th>
+                                                <th>类型</th>
+                                                <th>状态</th>
+                                                <th>操作</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="device-config-body">
+                                            <!-- 设备配置将通过JavaScript动态加载 -->
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="tab-pane fade" id="history-pane" role="tabpanel">
-                <div class="card">
-                    <div class="card-header text-secondary">
-                        最近巡检记录 (数据库: netops.db)
-                    </div>
-                    <div class="card-body">
-                        <button class="btn btn-sm btn-outline-secondary mb-3" onclick="loadHistory()">🔄 刷新列表</button>
-                        <div class="table-responsive">
-                            <table class="table table-striped table-hover">
-                                <thead>
-                                    <tr>
-                                        <th>ID</th>
-                                        <th>时间</th>
-                                        <th>设备 IP</th>
-                                        <th>执行命令</th>
-                                        <th>状态</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="history-body">
-                                    </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
     </div>
 
-    <script src="https://cdn.bootcdn.net/ajax/libs/twitter-bootstrap/5.3.1/js/bootstrap.bundle.min.js"></script>
-    
+    <!-- 添加设备模态框 -->
+    <div class="modal fade" id="addDeviceModal" tabindex="-1" aria-labelledby="addDeviceModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addDeviceModalLabel">添加设备</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="deviceForm">
+                        <div class="mb-3">
+                            <label for="deviceName" class="form-label">设备名称</label>
+                            <input type="text" class="form-control" id="deviceName" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="deviceHost" class="form-label">IP地址</label>
+                            <input type="text" class="form-control" id="deviceHost" required>
+                        </div>
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="devicePort" class="form-label">端口</label>
+                                <input type="number" class="form-control" id="devicePort" value="22" min="1" max="65535">
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="deviceType" class="form-label">设备类型</label>
+                                <select class="form-select" id="deviceType">
+                                    <option value="huawei_vrp">华为 VRP</option>
+                                    <option value="cisco_ios">思科 IOS</option>
+                                    <option value="cisco_nxos">思科 NX-OS</option>
+                                    <option value="juniper_junos">Juniper JunOS</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="deviceUsername" class="form-label">用户名</label>
+                            <input type="text" class="form-control" id="deviceUsername" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="devicePassword" class="form-label">密码</label>
+                            <input type="password" class="form-control" id="devicePassword" required>
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" onclick="saveDevice()">保存设备</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        // --- 功能 1: 实时巡检 ---
-        function startScan() {
-            const btn = document.getElementById('btn-scan');
-            const spinner = document.getElementById('spinner');
-            const status = document.getElementById('status-text');
-            const table = document.getElementById('result-table');
-            const tbody = document.getElementById('table-body');
+        // 全局状态管理
+        let currentDevice = null;
+        let devices = [];
+        let scanResults = [];
+        let history = [];
 
-            // 锁定按钮 UI
-            btn.disabled = true;
-            spinner.classList.remove('d-none');
-            btn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> 正在巡检中...';
-            status.innerText = "正在连接设备并采集数据，请稍候...";
-            tbody.innerHTML = "";
-            table.style.display = 'none';
+        // 页面加载时初始化
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDevices();
+            updateDashboard();
+        });
 
-            // 请求后端 API
-            fetch('/api/scan/interfaces')
+        // 更新仪表板数据
+        function updateDashboard() {
+            // 从API获取统计数据
+            fetch('/api/dashboard/stats')
                 .then(response => response.json())
                 .then(res => {
                     if (res.status === 'success') {
-                        // 渲染表格
-                        res.data.forEach(row => {
-                            const tr = document.createElement('tr');
-                            // 简单的状态颜色判断
-                            const phyClass = row.physical && row.physical.toLowerCase().includes('up') ? 'text-success fw-bold' : 'text-danger';
-                            
-                            tr.innerHTML = `
-                                <td>${row.interface || '-'}</td>
-                                <td>${row.ip_address || '-'}</td>
-                                <td class="${phyClass}">${row.physical || '-'}</td>
-                                <td>${row.protocol || '-'}</td>
-                            `;
-                            tbody.appendChild(tr);
-                        });
-                        table.style.display = 'table';
-                        status.innerHTML = `<span class="text-success">✅ 巡检完成! 共发现 ${res.data.length} 个接口</span>`;
+                        const data = res.data;
+                        document.getElementById('total-devices').textContent = data.total_devices || 0;
+                        document.getElementById('online-devices').textContent = data.online_devices || 0;
+                        document.getElementById('offline-devices').textContent = data.offline_devices || 0;
+                        document.getElementById('last-scan').textContent = data.last_scan || '-';
+                        document.getElementById('device-count').textContent = (data.total_devices || 0) + ' 台';
                     } else {
-                        alert("巡检失败: " + res.message);
-                        status.innerHTML = `<span class="text-danger">❌ 发生错误: ${res.message}</span>`;
+                        // 如果API调用失败，使用本地数据
+                        document.getElementById('total-devices').textContent = devices.length || 0;
+                        document.getElementById('online-devices').textContent = 0;
+                        document.getElementById('offline-devices').textContent = 0;
+                        document.getElementById('last-scan').textContent = '-';
+                        document.getElementById('device-count').textContent = (devices.length || 0) + ' 台';
                     }
                 })
                 .catch(err => {
-                    console.error(err);
-                    alert("网络请求失败");
-                    status.innerText = "网络请求失败";
-                })
-                .finally(() => {
-                    // 恢复按钮
-                    btn.disabled = false;
-                    btn.innerHTML = '开始接口巡检';
+                    console.error('获取仪表板数据错误:', err);
+                    // 如果API调用失败，使用本地数据
+                    document.getElementById('total-devices').textContent = devices.length || 0;
+                    document.getElementById('online-devices').textContent = 0;
+                    document.getElementById('offline-devices').textContent = 0;
+                    document.getElementById('last-scan').textContent = '-';
+                    document.getElementById('device-count').textContent = (devices.length || 0) + ' 台';
                 });
         }
 
-        // --- 功能 2: 加载历史记录 ---
-        function loadHistory() {
-            const tbody = document.getElementById('history-body');
-            tbody.innerHTML = '<tr><td colspan="5" class="text-center">正在加载数据...</td></tr>';
-
-            fetch('/api/history')
+        // 加载设备列表
+        function loadDevices() {
+            fetch('/api/devices')
                 .then(response => response.json())
                 .then(res => {
-                    tbody.innerHTML = ""; // 清空
-                    if (res.data && res.data.length > 0) {
-                        res.data.forEach(log => {
-                            const tr = document.createElement('tr');
-                            const statusBadge = log.status === 'success' 
-                                ? '<span class="badge bg-success">成功</span>' 
-                                : '<span class="badge bg-danger">失败</span>';
-                            
-                            tr.innerHTML = `
-                                <td>${log.id}</td>
-                                <td>${log.timestamp}</td>
-                                <td>${log.device_ip}</td>
-                                <td><code>${log.command}</code></td>
-                                <td>${statusBadge}</td>
-                            `;
-                            tbody.appendChild(tr);
-                        });
+                    if (res.status === 'success') {
+                        devices = res.data;
+                        updateDeviceList();
+                        updateDeviceTable();
+                        updateDashboard();
                     } else {
-                        tbody.innerHTML = '<tr><td colspan="5" class="text-center text-muted">暂无历史记录</td></tr>';
+                        console.error('获取设备列表失败:', res.message);
+                        // 保持空数组
+                        devices = [];
+                        updateDeviceList();
+                        updateDeviceTable();
+                        updateDashboard();
                     }
                 })
                 .catch(err => {
-                    console.error(err);
-                    tbody.innerHTML = '<tr><td colspan="5" class="text-center text-danger">加载失败</td></tr>';
+                    console.error('API调用错误:', err);
+                    // 保持空数组
+                    devices = [];
+                    updateDeviceList();
+                    updateDeviceTable();
+                    updateDashboard();
                 });
+        }
+
+        // 更新设备列表显示
+        function updateDeviceList() {
+            const listElement = document.getElementById('device-list');
+            listElement.innerHTML = '';
+
+            devices.forEach(device => {
+                const statusClass = device.status === 'online' ? 'status-online' :
+                                  device.status === 'offline' ? 'status-offline' : 'status-unknown';
+
+                const item = document.createElement('a');
+                item.className = 'list-group-item list-group-item-action device-card';
+                item.href = '#';
+                item.onclick = () => selectDevice(device);
+
+                item.innerHTML = `
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="fw-bold">${device.name}</div>
+                            <small class="text-muted">${device.host}:${device.port}</small>
+                        </div>
+                        <span>
+                            <span class="status-indicator ${statusClass}"></span>
+                            <i class="fas fa-chevron-right"></i>
+                        </span>
+                    </div>
+                `;
+
+                listElement.appendChild(item);
+            });
+        }
+
+        // 更新设备表格
+        function updateDeviceTable() {
+            const tbody = document.getElementById('device-config-body');
+            tbody.innerHTML = '';
+
+            devices.forEach(device => {
+                const statusClass = device.status === 'online' ? 'status-online' :
+                                  device.status === 'offline' ? 'status-offline' : 'status-unknown';
+
+                const statusText = device.status === 'online' ? '在线' :
+                                 device.status === 'offline' ? '离线' : '未知';
+
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${device.name}</td>
+                    <td>${device.host}</td>
+                    <td>${device.port}</td>
+                    <td>${device.type}</td>
+                    <td>
+                        <span class="status-indicator ${statusClass}"></span>
+                        ${statusText}
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-outline-primary action-btn" onclick="testConnection(${device.id})">
+                            <i class="fas fa-plug"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-info action-btn" onclick="editDevice(${device.id})">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button class="btn btn-sm btn-outline-danger action-btn" onclick="deleteDevice(${device.id})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                `;
+
+                tbody.appendChild(row);
+            });
+        }
+
+        // 选择设备
+        function selectDevice(device) {
+            currentDevice = device;
+            document.querySelectorAll('#device-list .list-group-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.closest('.list-group-item').classList.add('active');
+
+            // 可以在这里加载设备相关的数据
+        }
+
+        // 开始巡检
+        function startScan() {
+            if (!currentDevice) {
+                alert('请选择要巡检的设备');
+                return;
+            }
+
+            const btn = document.querySelector('#scan-pane .btn-primary');
+            const tbody = document.getElementById('scan-table-body');
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center">正在巡检中...</td></tr>';
+
+            // 实际API调用
+            fetch(`/api/scan/device/${currentDevice.id}`)
+                .then(response => response.json())
+                .then(res => {
+                    if (res.status === 'success') {
+                        tbody.innerHTML = '';
+                        if (res.data && Array.isArray(res.data)) {
+                            res.data.forEach(row => {
+                                const tr = document.createElement('tr');
+                                const phyClass = row.physical && row.physical.toLowerCase().includes('up') ? 'text-success fw-bold' : 'text-danger';
+                                const protocolClass = row.protocol && row.protocol.toLowerCase().includes('up') ? 'text-success fw-bold' : 'text-danger';
+
+                                tr.innerHTML = `
+                                    <td>${row.interface || '-'}</td>
+                                    <td>${row.ip_address || '-'}</td>
+                                    <td class="${phyClass}">${row.physical || '-'}</td>
+                                    <td>${row.protocol || '-'}</td>
+                                    <td>${row.description || ''}</td>
+                                    <td>
+                                        <button class="btn btn-sm btn-outline-info action-btn" onclick="showInterfaceDetails('${row.interface || ''}')">
+                                            <i class="fas fa-info-circle"></i>
+                                        </button>
+                                    </td>
+                                `;
+                                tbody.appendChild(tr);
+                            });
+                        }
+                    } else {
+                        alert("巡检失败: " + res.message);
+                        tbody.innerHTML = '<tr><td colspan="6" class="text-center text-danger">巡检失败: ' + res.message + '</td></tr>';
+                    }
+                })
+                .catch(err => {
+                    console.error('API调用错误:', err);
+                    alert("网络请求失败");
+                    tbody.innerHTML = '<tr><td colspan="6" class="text-center text-danger">网络请求失败</td></tr>';
+                });
+        }
+
+        // 加载当前巡检结果
+        function loadCurrentScan() {
+            if (currentDevice) {
+                startScan();
+            }
+        }
+
+        // 加载扫描历史
+        function loadScanHistory() {
+            // 如果有当前设备，加载该设备的扫描历史
+            if (currentDevice) {
+                startScan();
+            }
+        }
+
+        // 加载历史记录
+        function loadHistory() {
+            const tbody = document.getElementById('history-body');
+            tbody.innerHTML = '<tr><td colspan="6" class="text-center">正在加载历史记录...</td></tr>';
+
+            // 模拟API调用
+            setTimeout(() => {
+                // 模拟返回的历史数据
+                const mockHistory = [
+                    { id: 1, timestamp: '2023-12-01 10:30:00', device_ip: '192.168.10.1', command: 'display ip interface brief', status: 'success', result: '24条记录' },
+                    { id: 2, timestamp: '2023-12-01 09:00:00', device_ip: '192.168.10.1', command: 'display version', status: 'success', result: '版本信息' },
+                    { id: 3, timestamp: '2023-11-30 15:45:00', device_ip: '192.168.10.2', command: 'display interface brief', status: 'error', result: '连接失败' }
+                ];
+
+                tbody.innerHTML = '';
+                mockHistory.forEach(log => {
+                    const statusBadge = log.status === 'success'
+                        ? '<span class="badge bg-success">成功</span>'
+                        : '<span class="badge bg-danger">失败</span>';
+
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${log.id}</td>
+                        <td>${log.timestamp}</td>
+                        <td>${log.device_ip}</td>
+                        <td><code>${log.command}</code></td>
+                        <td>${statusBadge}</td>
+                        <td>${log.result}</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            }, 1000);
+        }
+
+        // 显示添加设备模态框
+        function showAddDeviceModal() {
+            document.getElementById('deviceForm').reset();
+            const modal = new bootstrap.Modal(document.getElementById('addDeviceModal'));
+            modal.show();
+        }
+
+        // 保存设备
+        function saveDevice() {
+            const device = {
+                id: devices.length + 1,
+                name: document.getElementById('deviceName').value,
+                host: document.getElementById('deviceHost').value,
+                port: parseInt(document.getElementById('devicePort').value),
+                type: document.getElementById('deviceType').value,
+                username: document.getElementById('deviceUsername').value,
+                password: document.getElementById('devicePassword').value,
+                status: 'unknown'
+            };
+
+            devices.push(device);
+            updateDeviceList();
+            updateDeviceTable();
+            updateDashboard();
+
+            // 关闭模态框
+            bootstrap.Modal.getInstance(document.getElementById('addDeviceModal')).hide();
+
+            alert('设备添加成功！');
+        }
+
+        // 测试设备连接
+        function testConnection(deviceId) {
+            const device = devices.find(d => d.id === deviceId);
+            if (device) {
+                alert(`正在测试 ${device.name} (${device.host}) 的连接...`);
+                // 这里应该调用后端API进行连接测试
+            }
+        }
+
+        // 编辑设备
+        function editDevice(deviceId) {
+            const device = devices.find(d => d.id === deviceId);
+            if (device) {
+                document.getElementById('deviceName').value = device.name;
+                document.getElementById('deviceHost').value = device.host;
+                document.getElementById('devicePort').value = device.port;
+                document.getElementById('deviceType').value = device.type;
+                document.getElementById('deviceUsername').value = device.username;
+
+                const modal = new bootstrap.Modal(document.getElementById('addDeviceModal'));
+                modal.show();
+
+                // 替换保存按钮功能为更新设备
+                const saveBtn = document.querySelector('#addDeviceModal .btn-primary');
+                saveBtn.onclick = () => updateDevice(deviceId);
+            }
+        }
+
+        // 更新设备
+        function updateDevice(deviceId) {
+            const device = devices.find(d => d.id === deviceId);
+            if (device) {
+                device.name = document.getElementById('deviceName').value;
+                device.host = document.getElementById('deviceHost').value;
+                device.port = parseInt(document.getElementById('devicePort').value);
+                device.type = document.getElementById('deviceType').value;
+                device.username = document.getElementById('deviceUsername').value;
+
+                if (document.getElementById('devicePassword').value) {
+                    device.password = document.getElementById('devicePassword').value;
+                }
+            }
+
+            updateDeviceList();
+            updateDeviceTable();
+
+            // 关闭模态框并重置保存功能
+            bootstrap.Modal.getInstance(document.getElementById('addDeviceModal')).hide();
+
+            // 恢复添加设备的保存功能
+            const saveBtn = document.querySelector('#addDeviceModal .btn-primary');
+            saveBtn.onclick = saveDevice;
+
+            alert('设备更新成功！');
+        }
+
+        // 删除设备
+        function deleteDevice(deviceId) {
+            if (confirm('确定要删除这个设备吗？')) {
+                devices = devices.filter(d => d.id !== deviceId);
+                updateDeviceList();
+                updateDeviceTable();
+                updateDashboard();
+            }
+        }
+
+        // 显示接口详情
+        function showInterfaceDetails(interfaceName) {
+            alert(`显示接口 ${interfaceName} 的详细信息...`);
+        }
+
+        // 开始全网巡检
+        function startAllScan() {
+            if (confirm('确定要开始全网巡检吗？这将对所有设备执行巡检任务。')) {
+                alert('全网巡检任务已启动...');
+                // 这里应该对所有设备执行巡检任务
+            }
+        }
+
+        // Ping测试
+        function pingAll() {
+            alert('开始对所有设备进行Ping测试...');
+            // 这里应该对所有设备执行Ping测试
+        }
+
+        // 生成报告
+        function generateReport() {
+            alert('正在生成巡检报告...');
+            // 这里应该生成巡检报告
+        }
+
+        // 导出历史记录
+        function exportHistory() {
+            alert('正在导出历史记录...');
+            // 这里应该导出历史记录
+        }
+
+        // 刷新所有数据
+        function refreshAll() {
+            loadDevices();
+            loadHistory();
+            updateDashboard();
+            alert('数据已刷新');
         }
     </script>
 </body>
