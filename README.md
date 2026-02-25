@@ -2,13 +2,20 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python Version](https://img.shields.io/badge/Python-3.7%2B-blue.svg)](https://www.python.org/)
-[![Version](https://img.shields.io/badge/Version-v2.0-blue.svg)](https://github.com/yearsGG/python-automation-learning)
+[![Version](https://img.shields.io/badge/Version-v2.1-blue.svg)](https://github.com/yearsGG/python-automation-learning)
 
 一款为网络工程师和NetDevOps初学者设计的、功能完整的网络设备自动化巡检平台。集成可视化SSH/Telnet交互、批量设备巡检、性能监控、报告生成和告警通知功能。
 
 ---
 
 ## 🚀 项目亮点 (Key Features)
+
+### v2.1 新增功能 🎉
+- **🌐 双路径连通性测试**: 支持直接ping和SSH跳转ping两种方式测试网络连通性
+- **📋 批量Ping测试**: 支持批量测试多个目标设备的连通性
+- **📊 详细统计信息**: 提供丢包率、RTT（往返时间）等详细网络性能指标
+- **🔧 Web界面集成**: 在前端界面提供直观的ping测试模态框和结果展示
+- **🔄 TextFSM模板支持**: 新增华为VRP ping命令输出解析模板
 
 ### v2.0 新增功能 🎉
 - **📊 批量设备巡检**: 支持多线程并发巡检，自动采集设备CPU、内存、接口状态等性能指标
@@ -50,9 +57,13 @@
 ## 🛠️ 技术栈 (Tech Stack)
 
 - **核心语言**: Python 3
+- **Web框架**: Flask (v2.1新增)
 - **SSH协议库**: `paramiko`
 - **Telnet协议库**: `telnetlib` (Python标准库)
 - **终端彩色输出**: `colorama`
+- **数据解析**: `textfsm` (v2.1新增)
+- **前端**: Bootstrap 5, JavaScript (v2.1新增)
+- **数据库**: SQLite (v2.1新增)
 
 ## ⚙️ 安装与环境准备 (Installation)
 
@@ -76,7 +87,55 @@
 
 ## 📚 如何使用 (Quick Start)
 
-### 方式一：快速巡检（v2.0推荐）
+### 方式一：Web界面操作（v2.1新增推荐）
+
+1. **启动Web应用**
+    ```bash
+    cd src
+    python run.py
+    ```
+
+2. **访问Web界面**
+    - 打开浏览器访问 `http://localhost:5002`
+    - 在设备管理界面添加设备信息
+    - 使用可视化界面进行设备巡检和ping测试
+
+3. **使用双路径Ping功能**
+    - 点击”Ping测试”按钮
+    - 选择测试方法：
+      - **直接Ping**：从服务器直接ping目标设备
+      - **SSH跳转Ping**：通过已连接的网络设备ping其他目标
+    - 配置测试参数（包数量、超时时间等）
+    - 查看详细的连通性统计信息
+
+---
+
+### 方式二：API调用（v2.1新增）
+
+1. **直接Ping测试**
+    ```bash
+    curl -X POST http://localhost:5002/api/ping/direct/1 \
+      -H “Content-Type: application/json” \
+      -d '{“target_ip”: “8.8.8.8”, “count”: 5, “timeout”: 3}'
+    ```
+
+2. **SSH跳转Ping测试**
+    ```bash
+    curl -X POST http://localhost:5002/api/ping/via-ssh/1 \
+      -H “Content-Type: application/json” \
+      -d '{“target_ip”: “192.168.2.1”, “count”: 5, “timeout”: 3}'
+    ```
+
+3. **批量Ping测试**
+    ```bash
+    curl -X POST http://localhost:5002/api/ping/batch \
+      -H “Content-Type: application/json” \
+      -d '{“targets”: [“8.8.8.8”, “1.1.1.1”], “method”: “direct”}'
+    ```
+
+---
+
+### 方式三：快速巡检（v2.0推荐）
 
 1. **配置设备列表**
 
@@ -111,7 +170,7 @@ python main_inspection.py
 
 ---
 
-### 方式二：可视化调试（v1.0核心功能）
+### 方式四：可视化调试（v1.0核心功能）
 
 下面是一个使用 `VisualSSH` 连接一台华为设备并执行命令的简单示例 (`main.py`)：
 
@@ -120,9 +179,9 @@ from my_visual_ssh import VisualSSH
 from colorama import Fore, Style
 
 # --- 设备连接信息 ---
-HOST = '192.168.85.254' 
-USER = 'netconftest'      
-PASSWORD = 'YourPassword@123' 
+HOST = '192.168.85.254'
+USER = 'netconftest'
+PASSWORD = 'YourPassword@123'
 
 # --- 设备提示符信息 ---
 USER_PROMPT = b'>'
@@ -132,20 +191,20 @@ ssh = None
 try:
     # 1. 初始化并建立SSH连接
     ssh = VisualSSH(HOST, username=USER, password=PASSWORD)
-    
-    # 2. 等待用户视图提示符，并存入“记忆”
+
+    # 2. 等待用户视图提示符，并存入”记忆”
     ssh.read_until(USER_PROMPT)
-    
+
     # 3. 进入系统视图
-    ssh.write(b"system-view")
-    
-    # 4. 等待系统视图提示符，并更新“记忆”
+    ssh.write(b”system-view”)
+
+    # 4. 等待系统视图提示符，并更新”记忆”
     ssh.read_until(SYSTEM_PROMPT)
 
     # 5. 使用execute()方法，它将自动使用记忆中的']'作为结束标志
-    output = ssh.execute(b"display ip interface brief")
+    output = ssh.execute(b”display ip interface brief”)
     print(output)
-    
+
 finally:
     # 确保连接被关闭
     if ssh:
@@ -156,6 +215,26 @@ finally:
 
 ```
 python自动化/
+├── src/                      # 源代码目录
+│   ├── run.py                # Flask Web应用主程序 (v2.1新增)
+│   ├── core/                 # 核心功能模块
+│   │   └── ssh_client.py     # SSH客户端类，包含ping_test方法 (v2.1增强)
+│   ├── app/                  # Web应用组件
+│   │   ├── templates/        # 前端模板
+│   │   │   └── index.html    # 主页面，包含ping模态框 (v2.1增强)
+│   │   └── static/           # 静态资源
+│   ├── ntc-templates/        # TextFSM模板目录 (v2.1新增)
+│   │   └── ntc_templates/
+│   │       └── templates/
+│   │           └── huawei_vrp_ping.textfsm  # 华为VRP ping解析模板 (v2.1新增)
+│   ├── my_visual_ssh.py      # SSH可视化交互类
+│   ├── my_visual_telnet.py   # Telnet可视化交互类
+│   ├── device_inspector.py   # 设备巡检核心模块（v2.0新增）
+│   ├── main_inspection.py    # 完整巡检主程序（v2.0新增）
+│   ├── main_refactored.py    # 配置化的SSH执行示例
+│   ├── main.py               # 简单SSH示例
+│   └── app/                  # 应用数据
+│       └── netops.db         # SQLite数据库文件
 ├── my_visual_ssh.py          # SSH可视化交互类
 ├── my_visual_telnet.py       # Telnet可视化交互类
 ├── device_inspector.py       # 设备巡检核心模块（v2.0新增）
@@ -188,17 +267,17 @@ python自动化/
 
 ## 🔮 未来计划 (Roadmap)
 
-### v2.1 计划
+### v2.2 计划
 - [ ] 集成SNMP数据采集功能（使用pysnmp）
-- [ ] 使用TextFSM进行结构化数据解析
+- [ ] 使用NetworkX进行网络拓扑自动发现与可视化
 - [ ] Excel格式巡检报告（带图表）
-- [ ] Web界面展示巡检结果
+- [ ] 更多厂商设备支持（思科、Juniper等）
 
 ### v3.0 愿景
-- [ ] NetworkX网络拓扑自动发现与可视化
 - [ ] 支持NETCONF/RESTCONF API
 - [ ] 配置自动备份和变更检测
 - [ ] 容器化部署（Docker + Kubernetes）
+- [ ] 实时网络监控仪表板
 
 ## 许可证 (License)
 
