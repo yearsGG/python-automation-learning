@@ -418,6 +418,258 @@ def ping_batch():
             "data": []
         })
 
+
+# 模板映射，将命令映射到对应的TextFSM模板（针对EVE-NG环境优化）
+COMMAND_TEMPLATE_MAPPING = {
+    "display ip interface brief": "/root/github/python-automation-learning/venv/lib/python3.10/site-packages/ntc_templates/templates/huawei_vrp_display_ip_interface_brief.textfsm",
+    "display version": "/root/github/python-automation-learning/venv/lib/python3.10/site-packages/ntc_templates/templates/huawei_vrp_display_version.textfsm",
+    "display device": "/root/github/python-automation-learning/venv/lib/python3.10/site-packages/ntc_templates/templates/huawei_vrp_display_device.textfsm",
+    "display interface": "/root/github/python-automation-learning/venv/lib/python3.10/site-packages/ntc_templates/templates/huawei_vrp_display_interface.textfsm",
+    "display interface brief": "/root/github/python-automation-learning/venv/lib/python3.10/site-packages/ntc_templates/templates/huawei_vrp_display_interface_brief.textfsm",
+    "display interface description": "/root/github/python-automation-learning/venv/lib/python3.10/site-packages/ntc_templates/templates/huawei_vrp_display_interface_description.textfsm",
+    "display vlan": "/root/github/python-automation-learning/venv/lib/python3.10/site-packages/ntc_templates/templates/huawei_vrp_display_vlan.textfsm",
+    "display vlan brief": "/root/github/python-automation-learning/venv/lib/python3.10/site-packages/ntc_templates/templates/huawei_vrp_display_vlan_brief.textfsm",
+    "display arp": "/root/github/python-automation-learning/venv/lib/python3.10/site-packages/ntc_templates/templates/huawei_vrp_display_arp_all.textfsm",
+    "display arp brief": "/root/github/python-automation-learning/venv/lib/python3.10/site-packages/ntc_templates/templates/huawei_vrp_display_arp_brief.textfsm",
+    "display mac-address": "/root/github/python-automation-learning/venv/lib/python3.10/site-packages/ntc_templates/templates/huawei_vrp_display_mac-address.textfsm",
+    "display lldp neighbor": "/root/github/python-automation-learning/venv/lib/python3.10/site-packages/ntc_templates/templates/huawei_vrp_display_lldp_neighbor.textfsm",
+    "display stp brief": "/root/github/python-automation-learning/venv/lib/python3.10/site-packages/ntc_templates/templates/huawei_vrp_display_stp_brief.textfsm",
+    "display users": "/root/github/python-automation-learning/venv/lib/python3.10/site-packages/ntc_templates/templates/huawei_vrp_display_users.textfsm",
+    "display clock": "/root/github/python-automation-learning/venv/lib/python3.10/site-packages/ntc_templates/templates/huawei_vrp_display_clock.textfsm",
+    "display memory": "/root/github/python-automation-learning/venv/lib/python3.10/site-packages/ntc_templates/templates/huawei_vrp_display_memory.textfsm",
+    "display cpu-usage": "/root/github/python-automation-learning/venv/lib/python3.10/site-packages/ntc_templates/templates/huawei_vrp_display_cpu-usage.textfsm",
+    "display ip routing-table": "/root/github/python-automation-learning/venv/lib/python3.10/site-packages/ntc_templates/templates/huawei_vrp_display_ip_routing-table.textfsm"
+}
+
+
+@app.route('/api/commands', methods=['GET'])
+def get_available_commands():
+    """获取系统支持的命令列表"""
+    commands = list(COMMAND_TEMPLATE_MAPPING.keys())
+    return jsonify({
+        "status": "success",
+        "data": {
+            "commands": commands,
+            "total": len(commands)
+        }
+    })
+
+
+@app.route('/api/execute-command/<int:device_id>', methods=['POST'])
+def execute_device_command(device_id):
+    """在设备上执行指定命令并返回解析结果"""
+    device = get_device_by_id(device_id)
+    if not device:
+        return jsonify({"status": "error", "message": "Device not found"}), 404
+
+    try:
+        data = request.get_json() or {}
+        command = data.get('command', '').strip()
+
+        if not command:
+            return jsonify({"status": "error", "message": "Command is required"}), 400
+
+        # 检查是否有对应的模板（精确匹配优先，然后是包含匹配）
+        template_path = None
+
+        # 首先尝试精确匹配
+        if command.lower() in COMMAND_TEMPLATE_MAPPING:
+            template_path = COMMAND_TEMPLATE_MAPPING[command.lower()]
+        else:
+            # 如果没有精确匹配，尝试包含匹配（按长度倒序排列，优先匹配更长的命令）
+            sorted_patterns = sorted(COMMAND_TEMPLATE_MAPPING.keys(), key=len, reverse=True)
+            for cmd_pattern in sorted_patterns:
+                if cmd_pattern in command.lower():
+                    template_path = COMMAND_TEMPLATE_MAPPING[cmd_pattern]
+                    break
+
+        if not template_path:
+            return jsonify({
+                "status": "error",
+                "message": f"No template found for command: {command}",
+                "supported_commands": list(COMMAND_TEMPLATE_MAPPING.keys())
+            }), 400
+
+        with NetworkDevice(**{k: v for k, v in device.items() if k in ['host', 'username', 'password', 'port', 'device_type']}) as dev:
+            try:
+                # 进入系统视图
+                dev.enter_system_view()
+
+                # 执行命令
+                raw_output = dev.execute_command(command)
+
+                # 检查原始输出中是否包含错误信息
+                if "Error:" in raw_output or "error:" in raw_output or "Invalid input" in raw_output or "Unrecognized command" in raw_output:
+                    # 命令执行失败，记录错误日志
+                    save_log(device['host'], command, raw_output, status="error")
+                    return jsonify({
+                        "status": "error",
+                        "message": f"Command execution failed: {raw_output}",
+                        "raw_output": raw_output
+                    })
+
+                # 使用对应的TextFSM模板解析结果
+                if not os.path.exists(template_path):
+                    return jsonify({
+                        "status": "error",
+                        "message": f"Template not found: {template_path}"
+                    }), 500
+
+                try:
+                    import textfsm
+                    with open(template_path, 'r', encoding='utf-8') as f:
+                        re_table = textfsm.TextFSM(f)
+                        result = re_table.ParseText(raw_output)
+                        headers = re_table.header
+
+                        # 强制转小写 (方便前端调用)
+                        headers_lower = [h.lower() for h in headers]
+
+                        # 组合成字典
+                        parsed_data = [dict(zip(headers_lower, row)) for row in result]
+
+                    # 记录成功日志
+                    save_log(device['host'], command, parsed_data, status="success")
+
+                    return jsonify({
+                        "status": "success",
+                        "data": {
+                            "command": command,
+                            "parsed_result": parsed_data,
+                            "raw_output": raw_output,
+                            "template_used": os.path.basename(template_path)
+                        }
+                    })
+
+                except Exception as e:
+                    # 解析失败，但仍返回原始输出，标记为部分成功
+                    save_log(device['host'], command, str(e), status="warning")
+                    return jsonify({
+                        "status": "partial_success",
+                        "message": f"Command executed but TextFSM parsing failed: {str(e)}",
+                        "raw_output": raw_output,
+                        "parsed_result": None,  # No structured data
+                        "template_used": os.path.basename(template_path)
+                    })
+
+            except Exception as e:
+                # 连接或执行失败，记录错误日志
+                save_log(device['host'], command, str(e), status="exception")
+                return jsonify({
+                    "status": "error",
+                    "message": f"Command execution failed: {str(e)}"
+                })
+
+    except Exception as e:
+        # 执行命令失败，记录错误日志
+        save_log(device['host'], command, str(e), status="exception")
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        })
+
+
+@app.route('/api/batch-commands/<int:device_id>', methods=['POST'])
+def execute_batch_commands(device_id):
+    """批量执行命令"""
+    device = get_device_by_id(device_id)
+    if not device:
+        return jsonify({"status": "error", "message": "Device not found"}), 404
+
+    try:
+        data = request.get_json() or {}
+        commands = data.get('commands', [])
+
+        if not commands:
+            return jsonify({"status": "error", "message": "Commands list is required"}), 400
+
+        results = []
+
+        with NetworkDevice(**{k: v for k, v in device.items() if k in ['host', 'username', 'password', 'port', 'device_type']}) as dev:
+            # 进入系统视图
+            dev.enter_system_view()
+
+            for command in commands:
+                command = command.strip()
+                if not command:
+                    continue
+
+                # 检查是否有对应的模板（精确匹配优先，然后是包含匹配）
+                template_path = None
+
+                # 首先尝试精确匹配
+                if command.lower() in COMMAND_TEMPLATE_MAPPING:
+                    template_path = COMMAND_TEMPLATE_MAPPING[command.lower()]
+                else:
+                    # 如果没有精确匹配，尝试包含匹配（按长度倒序排列，优先匹配更长的命令）
+                    sorted_patterns = sorted(COMMAND_TEMPLATE_MAPPING.keys(), key=len, reverse=True)
+                    for cmd_pattern in sorted_patterns:
+                        if cmd_pattern in command.lower():
+                            template_path = COMMAND_TEMPLATE_MAPPING[cmd_pattern]
+                            break
+
+                command_result = {
+                    "command": command,
+                    "status": "success",
+                    "parsed_result": [],
+                    "raw_output": "",
+                    "error": None
+                }
+
+                try:
+                    # 执行命令
+                    raw_output = dev.execute_command(command)
+                    command_result["raw_output"] = raw_output
+
+                    # 检查原始输出中是否包含错误信息
+                    if "Error:" in raw_output or "error:" in raw_output or "Invalid input" in raw_output or "Unrecognized command" in raw_output:
+                        command_result["status"] = "error"
+                        command_result["error"] = f"Command execution failed: {raw_output}"
+                        results.append(command_result)
+                        continue
+
+                    # 如果有对应模板，则尝试解析
+                    if template_path and os.path.exists(template_path):
+                        import textfsm
+                        with open(template_path, 'r', encoding='utf-8') as f:
+                            re_table = textfsm.TextFSM(f)
+                            result = re_table.ParseText(raw_output)
+                            headers = re_table.header
+
+                            # 强制转小写 (方便前端调用)
+                            headers_lower = [h.lower() for h in headers]
+
+                            # 组合成字典
+                            parsed_data = [dict(zip(headers_lower, row)) for row in result]
+
+                        command_result["parsed_result"] = parsed_data
+                        command_result["template_used"] = os.path.basename(template_path)
+                    else:
+                        # 没有对应模板，只返回原始输出
+                        command_result["parsed_result"] = None
+                        command_result["message"] = "No template available for this command, returning raw output"
+
+                    results.append(command_result)
+
+                except Exception as e:
+                    command_result["status"] = "error"
+                    command_result["error"] = str(e)
+                    results.append(command_result)
+
+        return jsonify({
+            "status": "success",
+            "data": {
+                "device_id": device_id,
+                "results": results
+            }
+        })
+
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        })
+
 @app.route('/api/history')
 def api_history():
     """获取历史记录"""

@@ -1,0 +1,331 @@
+{
+  "index": {
+    "status_code": 200,
+    "success": true,
+    "data": null,
+    "response_time": 0.05275
+  },
+  "get_devices": {
+    "status_code": 200,
+    "success": true,
+    "data": {
+      "data": [
+        {
+          "device_type": "huawei_vrp",
+          "host": "192.168.10.1",
+          "id": 1,
+          "name": "核心交换机",
+          "password": "Admin@123",
+          "port": 22,
+          "status": "online",
+          "username": "admin"
+        }
+      ],
+      "status": "success"
+    },
+    "response_time": 0.005452
+  },
+  "dashboard_stats": {
+    "status_code": 200,
+    "success": true,
+    "data": {
+      "data": {
+        "last_scan": "2026-02-27 02:36:35",
+        "offline_devices": 0,
+        "online_devices": 1,
+        "total_devices": 1
+      },
+      "status": "success"
+    },
+    "response_time": 0.00722
+  },
+  "get_commands": {
+    "status_code": 200,
+    "success": true,
+    "data": {
+      "data": {
+        "commands": [
+          "display ip interface brief",
+          "display version",
+          "display device",
+          "display interface",
+          "display interface brief",
+          "display interface description",
+          "display vlan",
+          "display vlan brief",
+          "display arp",
+          "display arp brief",
+          "display mac-address",
+          "display lldp neighbor",
+          "display stp brief",
+          "display users",
+          "display clock",
+          "display memory",
+          "display cpu-usage",
+          "display ip routing-table"
+        ],
+        "total": 18
+      },
+      "status": "success"
+    },
+    "response_time": 0.004649
+  },
+  "get_history": {
+    "status_code": 200,
+    "success": true,
+    "data": {
+      "data": [
+        {
+          "command": "display ip interface brief",
+          "device_ip": "192.168.10.1",
+          "id": 17,
+          "result_json": "[{\"interface\": \"GigabitEthernet0/0/0\", \"ip_address\": \"192.168.10.1/24\", \"physical\": \"up\", \"protocol\": \"up\"}, {\"interface\": \"GigabitEthernet0/0/1\", \"ip_address\": \"192.168.1.1/24\", \"physical\": \"up\", \"protocol\": \"up\"}, {\"interface\": \"GigabitEthernet0/0/2\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/3\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/4\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/5\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/6\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"NULL0\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"up(s)\"}]",
+          "status": "success",
+          "timestamp": "2026-02-27 02:36:35"
+        },
+        {
+          "command": "display ip interface brief",
+          "device_ip": "192.168.10.1",
+          "id": 16,
+          "result_json": "[{\"interface\": \"GigabitEthernet0/0/0\", \"ip_address\": \"192.168.10.1/24\", \"physical\": \"up\", \"protocol\": \"up\"}, {\"interface\": \"GigabitEthernet0/0/1\", \"ip_address\": \"192.168.1.1/24\", \"physical\": \"up\", \"protocol\": \"up\"}, {\"interface\": \"GigabitEthernet0/0/2\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/3\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/4\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/5\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/6\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"NULL0\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"up(s)\"}]",
+          "status": "success",
+          "timestamp": "2026-02-27 02:35:51"
+        },
+        {
+          "command": "display version",
+          "device_ip": "192.168.10.1",
+          "id": 15,
+          "result_json": "[{\"vrp_version\": \"5.170\", \"product_version\": \"AR1000V V300R022C00SPC100\", \"model\": \"AR1000V\", \"uptime\": \"0 week, 0 day, 0 hour, 25 minutes\", \"patch_version\": \"\"}]",
+          "status": "success",
+          "timestamp": "2026-02-27 02:34:03"
+        },
+        {
+          "command": "display ip interface brief",
+          "device_ip": "192.168.10.1",
+          "id": 14,
+          "result_json": "[{\"interface\": \"GigabitEthernet0/0/0\", \"ip_address\": \"192.168.10.1/24\", \"physical\": \"up\", \"protocol\": \"up\"}, {\"interface\": \"GigabitEthernet0/0/1\", \"ip_address\": \"192.168.1.1/24\", \"physical\": \"up\", \"protocol\": \"up\"}, {\"interface\": \"GigabitEthernet0/0/2\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/3\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/4\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/5\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/6\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"NULL0\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"up(s)\"}]",
+          "status": "success",
+          "timestamp": "2026-02-27 02:21:07"
+        },
+        {
+          "command": "display ip interface brief",
+          "device_ip": "192.168.10.1",
+          "id": 13,
+          "result_json": "[{\"interface\": \"GigabitEthernet0/0/0\", \"ip_address\": \"192.168.10.1/24\", \"physical\": \"up\", \"protocol\": \"up\"}, {\"interface\": \"GigabitEthernet0/0/1\", \"ip_address\": \"192.168.1.1/24\", \"physical\": \"up\", \"protocol\": \"up\"}, {\"interface\": \"GigabitEthernet0/0/2\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/3\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/4\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/5\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/6\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"NULL0\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"up(s)\"}]",
+          "status": "success",
+          "timestamp": "2026-02-27 02:20:48"
+        },
+        {
+          "command": "display ip interface brief",
+          "device_ip": "192.168.10.1",
+          "id": 12,
+          "result_json": "[{\"interface\": \"GigabitEthernet0/0/0\", \"ip_address\": \"192.168.10.1/24\", \"physical\": \"up\", \"protocol\": \"up\"}, {\"interface\": \"GigabitEthernet0/0/1\", \"ip_address\": \"192.168.1.1/24\", \"physical\": \"up\", \"protocol\": \"up\"}, {\"interface\": \"GigabitEthernet0/0/2\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/3\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/4\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/5\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/6\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"NULL0\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"up(s)\"}]",
+          "status": "success",
+          "timestamp": "2026-02-24 06:28:21"
+        },
+        {
+          "command": "display ip interface brief",
+          "device_ip": "192.168.10.1",
+          "id": 11,
+          "result_json": "[{\"interface\": \"GigabitEthernet0/0/0\", \"ip_address\": \"192.168.10.1/24\", \"physical\": \"up\", \"protocol\": \"up\"}, {\"interface\": \"GigabitEthernet0/0/1\", \"ip_address\": \"192.168.1.1/24\", \"physical\": \"up\", \"protocol\": \"up\"}, {\"interface\": \"GigabitEthernet0/0/2\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/3\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/4\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/5\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/6\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"NULL0\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"up(s)\"}]",
+          "status": "success",
+          "timestamp": "2026-02-24 06:28:10"
+        },
+        {
+          "command": "display ip interface brief",
+          "device_ip": "192.168.10.1",
+          "id": 10,
+          "result_json": "[{\"interface\": \"GigabitEthernet0/0/0\", \"ip_address\": \"192.168.10.1/24\", \"physical\": \"up\", \"protocol\": \"up\"}, {\"interface\": \"GigabitEthernet0/0/1\", \"ip_address\": \"192.168.1.1/24\", \"physical\": \"up\", \"protocol\": \"up\"}, {\"interface\": \"GigabitEthernet0/0/2\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/3\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/4\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/5\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/6\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"NULL0\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"up(s)\"}]",
+          "status": "success",
+          "timestamp": "2026-02-24 06:26:46"
+        },
+        {
+          "command": "display ip interface brief",
+          "device_ip": "192.168.10.1",
+          "id": 9,
+          "result_json": "[{\"interface\": \"GigabitEthernet0/0/0\", \"ip_address\": \"192.168.10.1/24\", \"physical\": \"up\", \"protocol\": \"up\"}, {\"interface\": \"GigabitEthernet0/0/1\", \"ip_address\": \"192.168.1.1/24\", \"physical\": \"up\", \"protocol\": \"up\"}, {\"interface\": \"GigabitEthernet0/0/2\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/3\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/4\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/5\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/6\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"NULL0\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"up(s)\"}]",
+          "status": "success",
+          "timestamp": "2026-02-24 05:22:26"
+        },
+        {
+          "command": "display ip interface brief",
+          "device_ip": "192.168.10.1",
+          "id": 8,
+          "result_json": "[{\"interface\": \"GigabitEthernet0/0/0\", \"ip_address\": \"192.168.10.1/24\", \"physical\": \"up\", \"protocol\": \"up\"}, {\"interface\": \"GigabitEthernet0/0/1\", \"ip_address\": \"192.168.1.1/24\", \"physical\": \"up\", \"protocol\": \"up\"}, {\"interface\": \"GigabitEthernet0/0/2\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/3\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/4\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/5\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/6\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"NULL0\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"up(s)\"}]",
+          "status": "success",
+          "timestamp": "2026-02-24 05:22:15"
+        },
+        {
+          "command": "display ip interface brief",
+          "device_ip": "192.168.10.1",
+          "id": 7,
+          "result_json": "[{\"interface\": \"GigabitEthernet0/0/0\", \"ip_address\": \"192.168.10.1/24\", \"physical\": \"up\", \"protocol\": \"up\"}, {\"interface\": \"GigabitEthernet0/0/1\", \"ip_address\": \"192.168.1.1/24\", \"physical\": \"up\", \"protocol\": \"up\"}, {\"interface\": \"GigabitEthernet0/0/2\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/3\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/4\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/5\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/6\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"NULL0\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"up(s)\"}]",
+          "status": "success",
+          "timestamp": "2026-02-24 05:22:04"
+        },
+        {
+          "command": "display ip interface brief",
+          "device_ip": "192.168.10.1",
+          "id": 6,
+          "result_json": "[{\"interface\": \"GigabitEthernet0/0/0\", \"ip_address\": \"192.168.10.1/24\", \"physical\": \"up\", \"protocol\": \"up\"}, {\"interface\": \"GigabitEthernet0/0/1\", \"ip_address\": \"192.168.1.1/24\", \"physical\": \"up\", \"protocol\": \"up\"}, {\"interface\": \"GigabitEthernet0/0/2\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/3\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/4\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/5\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/6\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"NULL0\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"up(s)\"}]",
+          "status": "success",
+          "timestamp": "2026-02-24 04:30:46"
+        },
+        {
+          "command": "display ip interface brief",
+          "device_ip": "192.168.10.1",
+          "id": 5,
+          "result_json": "[{\"interface\": \"GigabitEthernet0/0/0\", \"ip_address\": \"192.168.10.1/24\", \"physical\": \"up\", \"protocol\": \"up\"}, {\"interface\": \"GigabitEthernet0/0/1\", \"ip_address\": \"192.168.1.1/24\", \"physical\": \"up\", \"protocol\": \"up\"}, {\"interface\": \"GigabitEthernet0/0/2\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/3\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/4\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/5\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/6\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"NULL0\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"up(s)\"}]",
+          "status": "success",
+          "timestamp": "2026-02-24 04:29:55"
+        },
+        {
+          "command": "display ip interface brief",
+          "device_ip": "192.168.10.1",
+          "id": 4,
+          "result_json": "[{\"interface\": \"GigabitEthernet0/0/0\", \"ip_address\": \"192.168.10.1/24\", \"physical\": \"up\", \"protocol\": \"up\"}, {\"interface\": \"GigabitEthernet0/0/1\", \"ip_address\": \"192.168.1.1/24\", \"physical\": \"up\", \"protocol\": \"up\"}, {\"interface\": \"GigabitEthernet0/0/2\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/3\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/4\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/5\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/6\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"NULL0\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"up(s)\"}]",
+          "status": "success",
+          "timestamp": "2026-02-24 04:29:44"
+        },
+        {
+          "command": "display ip interface brief",
+          "device_ip": "192.168.10.1",
+          "id": 3,
+          "result_json": "[{\"interface\": \"GigabitEthernet0/0/0\", \"ip_address\": \"192.168.10.1/24\", \"physical\": \"up\", \"protocol\": \"up\"}, {\"interface\": \"GigabitEthernet0/0/1\", \"ip_address\": \"192.168.1.1/24\", \"physical\": \"up\", \"protocol\": \"up\"}, {\"interface\": \"GigabitEthernet0/0/2\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/3\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/4\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/5\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/6\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"NULL0\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"up(s)\"}]",
+          "status": "success",
+          "timestamp": "2026-02-24 04:29:33"
+        },
+        {
+          "command": "display ip interface brief",
+          "device_ip": "192.168.10.1",
+          "id": 2,
+          "result_json": "[{\"interface\": \"GigabitEthernet0/0/0\", \"ip_address\": \"192.168.10.1/24\", \"physical\": \"up\", \"protocol\": \"up\"}, {\"interface\": \"GigabitEthernet0/0/1\", \"ip_address\": \"192.168.1.1/24\", \"physical\": \"up\", \"protocol\": \"up\"}, {\"interface\": \"GigabitEthernet0/0/2\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/3\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/4\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/5\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/6\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"NULL0\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"up(s)\"}]",
+          "status": "success",
+          "timestamp": "2026-02-10 08:18:20"
+        },
+        {
+          "command": "display ip interface brief",
+          "device_ip": "192.168.10.1",
+          "id": 1,
+          "result_json": "[{\"interface\": \"GigabitEthernet0/0/0\", \"ip_address\": \"192.168.10.1/24\", \"physical\": \"up\", \"protocol\": \"up\"}, {\"interface\": \"GigabitEthernet0/0/1\", \"ip_address\": \"192.168.1.1/24\", \"physical\": \"up\", \"protocol\": \"up\"}, {\"interface\": \"GigabitEthernet0/0/2\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/3\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/4\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/5\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"GigabitEthernet0/0/6\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"down\"}, {\"interface\": \"NULL0\", \"ip_address\": \"unassigned\", \"physical\": \"up\", \"protocol\": \"up(s)\"}]",
+          "status": "success",
+          "timestamp": "2026-02-10 08:15:24"
+        }
+      ],
+      "status": "success"
+    },
+    "response_time": 0.007483
+  },
+  "ping_direct": {
+    "status_code": 200,
+    "success": true,
+    "data": {
+      "data": {
+        "reachable": false,
+        "target_ip": "8.8.8.8"
+      },
+      "status": "success"
+    },
+    "response_time": 4.029789
+  },
+  "ping_via_ssh": {
+    "status_code": 200,
+    "success": true,
+    "data": {
+      "data": {
+        "results": [
+          {
+            "dest_ip": "8.8.8.8",
+            "packet_loss": "100.00",
+            "packet_received": "0",
+            "packet_transmitted": "2",
+            "rtt_avg": "",
+            "rtt_max": "",
+            "rtt_min": ""
+          }
+        ],
+        "target_ip": "8.8.8.8"
+      },
+      "status": "success"
+    },
+    "response_time": 2.125958
+  },
+  "ping_batch": {
+    "status_code": 200,
+    "success": true,
+    "data": {
+      "data": [
+        {
+          "reachable": true,
+          "target": "8.8.8.8",
+          "target_ip": "8.8.8.8"
+        },
+        {
+          "reachable": false,
+          "target": "1.1.1.1",
+          "target_ip": "1.1.1.1"
+        }
+      ],
+      "status": "success"
+    },
+    "response_time": 10.044275
+  },
+  "execute_command": {
+    "status_code": 200,
+    "success": true,
+    "data": {
+      "data": {
+        "command": "display version",
+        "parsed_result": [
+          {
+            "model": "AR1000V",
+            "patch_version": "",
+            "product_version": "AR1000V V300R022C00SPC100",
+            "uptime": "0 week, 0 day, 0 hour, 59 minutes",
+            "vrp_version": "5.170"
+          }
+        ],
+        "raw_output": "Huawei Versatile Routing Platform Software\r\nVRP (R) software, Version 5.170 (AR1000V V300R022C00SPC100)\r\nCopyright (C) 2011-2022 HUAWEI TECH CO., LTD\r\nHuawei AR1000V Router uptime is 0 week, 0 day, 0 hour, 59 minutes\r\n\r\nMPU 0(Master) : uptime is 0 week, 0 day, 0 hour, 58 minutes\r\nSDRAM Memory Size    : 2048    M bytes\r\nMPU version information : \r\n1. PCB      Version  : AR01SRU0B VER.A\r\n2. MAB      Version  : 0\r\n3. Board    Type     : AR1000V\r\n4. BootROM  Version  : 0",
+        "template_used": "huawei_vrp_display_version.textfsm"
+      },
+      "status": "success"
+    },
+    "response_time": 11.138258
+  },
+  "batch_commands": {
+    "status_code": 200,
+    "success": true,
+    "data": {
+      "data": {
+        "device_id": 1,
+        "results": [
+          {
+            "command": "display version",
+            "error": null,
+            "parsed_result": [
+              {
+                "model": "AR1000V",
+                "patch_version": "",
+                "product_version": "AR1000V V300R022C00SPC100",
+                "uptime": "0 week, 0 day, 0 hour, 59 minutes",
+                "vrp_version": "5.170"
+              }
+            ],
+            "raw_output": "Huawei Versatile Routing Platform Software\r\nVRP (R) software, Version 5.170 (AR1000V V300R022C00SPC100)\r\nCopyright (C) 2011-2022 HUAWEI TECH CO., LTD\r\nHuawei AR1000V Router uptime is 0 week, 0 day, 0 hour, 59 minutes\r\n\r\nMPU 0(Master) : uptime is 0 week, 0 day, 0 hour, 58 minutes\r\nSDRAM Memory Size    : 2048    M bytes\r\nMPU version information : \r\n1. PCB      Version  : AR01SRU0B VER.A\r\n2. MAB      Version  : 0\r\n3. Board    Type     : AR1000V\r\n4. BootROM  Version  : 0",
+            "status": "success",
+            "template_used": "huawei_vrp_display_version.textfsm"
+          },
+          {
+            "command": "display device",
+            "error": "State Error raised. Rule Line: 29. Input Line: - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -",
+            "parsed_result": [],
+            "raw_output": "AR1000V's Device status:\r\nSlot  Sub Type             Online   Power     Register      Alarm        Primary\r\n- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -\r\n0     -   AR1000V          Present  PowerOn   Registered    Normal       Master",
+            "status": "error"
+          }
+        ]
+      },
+      "status": "success"
+    },
+    "response_time": 21.096225
+  }
+}

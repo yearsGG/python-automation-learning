@@ -244,3 +244,21 @@
 2026-02-09 05:04:20,404 - [INFO] - Device-192.168.10.1 - Execute: display nat server
 2026-02-09 05:04:20,721 - [INFO] - Device-192.168.10.1 - Execute: display bgp peer
 2026-02-09 05:04:21,146 - [INFO] - Device-192.168.10.1 - Execute: display traffic-filter applied-record
+2026-02-27 03:08:21,208 - [INFO] - Device-192.168.10.1 - Connecting to 192.168.10.1:22
+2026-02-27 03:08:22,107 - [INFO] - Device-192.168.10.1 - SSH Connection Established
+2026-02-27 03:08:22,108 - [INFO] - Device-192.168.10.1 - Execute: system-view
+2026-02-27 03:08:22,311 - [INFO] - Device-192.168.10.1 - Execute: display version
+2026-02-27 03:08:33,348 - [INFO] - Device-192.168.10.1 - Execute: display device
+2026-02-27 03:08:44,391 - [INFO] - Device-192.168.10.1 - Execute: display interface
+2026-02-27 03:08:54,425 - [INFO] - Device-192.168.10.1 - Execute: display interface brief
+2026-02-27 03:09:05,470 - [INFO] - Device-192.168.10.1 - Execute: display ip interface brief
+2026-02-27 03:09:16,503 - [INFO] - Device-192.168.10.1 - Execute: display current-configuration
+2026-02-27 03:09:27,533 - [INFO] - Device-192.168.10.1 - Execute: display saved-configuration
+2026-02-27 03:09:38,561 - [INFO] - Device-192.168.10.1 - Execute: display arp
+2026-02-27 03:09:49,589 - [INFO] - Device-192.168.10.1 - Execute: display vlan
+2026-02-27 03:10:00,636 - [INFO] - Device-192.168.10.1 - Execute: display mac-address
+2026-02-27 03:10:10,660 - [INFO] - Device-192.168.10.1 - Execute: display users
+2026-02-27 03:10:21,687 - [INFO] - Device-192.168.10.1 - Execute: display memory
+2026-02-27 03:10:31,712 - [INFO] - Device-192.168.10.1 - Execute: display lldp neighbor
+2026-02-27 03:10:41,739 - [INFO] - Device-192.168.10.1 - Execute: display stp brief
+2026-02-27 03:10:51,766 - [INFO] - Device-192.168.10.1 - Execute: display ip routing-table

@@ -165,6 +165,9 @@
                             <button class="btn btn-outline-info" onclick="pingAll()">
                                 <i class="fas fa-signal me-1"></i> Ping测试
                             </button>
+                            <button class="btn btn-outline-warning" onclick="openCommandModal()">
+                                <i class="fas fa-terminal me-1"></i> 命令执行
+                            </button>
                             <button class="btn btn-outline-success" onclick="generateReport()">
                                 <i class="fas fa-file-alt me-1"></i> 生成报告
                             </button>
@@ -520,6 +523,76 @@
         </div>
     </div>
 
+    <!-- 命令执行模态框 -->
+    <div class="modal fade" id="commandModal" tabindex="-1" aria-labelledby="commandModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="commandModalLabel">设备命令执行</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="commandForm">
+                        <div class="mb-3">
+                            <label for="commandDevice" class="form-label">选择设备</label>
+                            <select class="form-select" id="commandDevice">
+                                <!-- 设备选项将通过JavaScript动态加载 -->
+                            </select>
+                        </div>
+
+                        <div class="mb-3">
+                            <label for="commandType" class="form-label">命令类型</label>
+                            <select class="form-select" id="commandType" onchange="updateCommandInput()">
+                                <option value="single">单个命令</option>
+                                <option value="multiple">多个命令</option>
+                            </select>
+                        </div>
+
+                        <div id="singleCommandGroup">
+                            <div class="mb-3">
+                                <label for="commandInput" class="form-label">选择命令</label>
+                                <select class="form-select" id="commandInput">
+                                    <option value="">请选择命令...</option>
+                                </select>
+                            </div>
+                            <div class="mb-3">
+                                <label for="customCommand" class="form-label">或输入自定义命令</label>
+                                <input type="text" class="form-control" id="customCommand" placeholder="输入自定义命令，如：display version">
+                            </div>
+                        </div>
+
+                        <div id="multipleCommandGroup" style="display: none;">
+                            <div class="mb-3">
+                                <label for="batchCommands" class="form-label">批量命令 (每行一个)</label>
+                                <textarea class="form-control" id="batchCommands" rows="5" placeholder="例如：&#10;display version&#10;display device&#10;display interface brief"></textarea>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" id="saveToLog">
+                                <label class="form-check-label" for="saveToLog">
+                                    保存结果到日志
+                                </label>
+                            </div>
+                        </div>
+                    </form>
+
+                    <div id="commandResults" style="display: none;">
+                        <h6 class="mt-3">执行结果：</h6>
+                        <div id="commandResultsContent">
+                            <!-- 结果将通过JavaScript动态加载 -->
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>
+                    <button type="button" class="btn btn-primary" onclick="executeCommand()">执行命令</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
@@ -533,7 +606,276 @@
         document.addEventListener('DOMContentLoaded', function() {
             loadDevices();
             updateDashboard();
+
+            // 初始化批量模式事件监听器
+            const batchModeCheckbox = document.getElementById('batchMode');
+            if (batchModeCheckbox) {
+                batchModeCheckbox.addEventListener('change', function() {
+                    const batchGroup = document.getElementById('batchTargetsGroup');
+                    batchGroup.style.display = this.checked ? 'block' : 'none';
+                });
+            }
         });
+
+        // 更新命令输入显示
+        function updateCommandInput() {
+            const commandType = document.getElementById('commandType').value;
+            const singleGroup = document.getElementById('singleCommandGroup');
+            const multipleGroup = document.getElementById('multipleCommandGroup');
+
+            if (commandType === 'single') {
+                singleGroup.style.display = 'block';
+                multipleGroup.style.display = 'none';
+            } else {
+                singleGroup.style.display = 'none';
+                multipleGroup.style.display = 'block';
+            }
+        }
+
+        // 加载支持的命令列表
+        function loadSupportedCommands() {
+            const commandInput = document.getElementById('commandInput');
+            commandInput.innerHTML = '<option value="">请选择命令...</option>';
+
+            // 支持的命令列表（针对EVE-NG模拟环境，只保留实际可用的命令）
+            const commands = [
+                { value: 'display version', label: '显示版本信息' },
+                { value: 'display device', label: '显示设备信息' },
+                { value: 'display interface brief', label: '显示接口简要信息' },
+                { value: 'display ip interface brief', label: '显示IP接口简要信息' },
+                { value: 'display vlan', label: '显示VLAN信息' },
+                { value: 'display lldp neighbor', label: '显示LLDP邻居' },
+                { value: 'display stp brief', label: '显示STP简要信息' },
+                { value: 'display ip routing-table', label: '显示IP路由表' },
+                { value: 'display memory', label: '显示内存使用情况' },
+                { value: 'display clock', label: '显示系统时钟' },
+                { value: 'display this', label: '显示当前视图配置' }
+            ];
+
+            commands.forEach(cmd => {
+                const option = document.createElement('option');
+                option.value = cmd.value;
+                option.textContent = `${cmd.value} (${cmd.label})`;
+                commandInput.appendChild(option);
+            });
+        }
+
+        // 执行命令
+        function executeCommand() {
+            const deviceSelect = document.getElementById('commandDevice');
+            const commandType = document.getElementById('commandType').value;
+            const saveToLog = document.getElementById('saveToLog').checked;
+            const resultsDiv = document.getElementById('commandResults');
+            const resultsContent = document.getElementById('commandResultsContent');
+            const executeBtn = document.querySelector('#commandModal .btn-primary');
+
+            const selectedDeviceId = parseInt(deviceSelect.value);
+            if (!selectedDeviceId) {
+                alert('请选择要执行命令的设备');
+                return;
+            }
+
+            // 获取命令
+            let commands = [];
+            if (commandType === 'single') {
+                const customCmd = document.getElementById('customCommand').value.trim();
+                const selectedCmd = document.getElementById('commandInput').value;
+
+                if (customCmd) {
+                    commands = [customCmd];
+                } else if (selectedCmd) {
+                    commands = [selectedCmd];
+                } else {
+                    alert('请选择或输入命令');
+                    return;
+                }
+            } else {
+                const batchCmds = document.getElementById('batchCommands').value.trim();
+                if (!batchCmds) {
+                    alert('请输入要执行的命令');
+                    return;
+                }
+                commands = batchCmds.split('\n').filter(cmd => cmd.trim() !== '');
+            }
+
+            // 禁用按钮并显示加载状态
+            executeBtn.disabled = true;
+            executeBtn.innerHTML = '<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> 执行中...';
+
+            resultsDiv.style.display = 'none';
+            resultsContent.innerHTML = '';
+
+            // Determine if it's a single command or batch commands
+            let apiUrl;
+            let requestBody;
+
+            if (commands.length === 1) {
+                apiUrl = `/api/execute-command/${selectedDeviceId}`;
+                // For single command, send command in the expected format
+                requestBody = {
+                    command: commands[0],
+                    save_to_log: saveToLog
+                };
+            } else {
+                apiUrl = `/api/batch-commands/${selectedDeviceId}`;
+                // For batch commands, keep existing format
+                requestBody = {
+                    commands: commands,
+                    save_to_log: saveToLog
+                };
+            }
+
+            fetch(apiUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(requestBody)
+            })
+            .then(response => response.json())
+            .then(data => {
+                executeBtn.disabled = false;
+                executeBtn.innerHTML = '执行命令';
+
+                if (data.status === 'success') {
+                    // 显示结果
+                    displayCommandResults(data.data);
+                } else {
+                    alert('命令执行失败: ' + (data.message || '未知错误'));
+                    console.error('Command execution error:', data);
+                }
+            })
+            .catch(err => {
+                executeBtn.disabled = false;
+                executeBtn.innerHTML = '执行命令';
+                alert('命令执行失败: ' + err.message);
+                console.error('Command execution error:', err);
+            });
+        }
+
+        // 显示命令执行结果
+        function displayCommandResults(data) {
+            const resultsDiv = document.getElementById('commandResults');
+            const resultsContent = document.getElementById('commandResultsContent');
+
+            resultsContent.innerHTML = '';
+
+            // 根据API响应格式处理数据
+            if (data && data.results && Array.isArray(data.results)) {
+                // 批量命令响应格式
+                data.results.forEach((result, index) => {
+                    const commandCard = document.createElement('div');
+                    commandCard.className = 'card mb-3';
+
+                    const commandResult = result.parsed_result || result.raw_output || '无结果';
+                    const statusClass = result.status === 'error' ? 'text-danger' : 'text-success';
+                    const statusText = result.status === 'error' ? '失败' : '成功';
+
+                    commandCard.innerHTML = `
+                        <div class="card-header">
+                            <strong>命令:</strong> ${result.command || '未知命令'}
+                            <span class="float-end ${statusClass}">${statusText}</span>
+                        </div>
+                        <div class="card-body">
+                            <h6 class="card-title">解析结果:</h6>
+                            <pre class="bg-light p-2 rounded">${JSON.stringify(commandResult, null, 2)}</pre>
+
+                            <h6 class="card-title mt-3">原始输出:</h6>
+                            <pre class="bg-light p-2 rounded">${result.raw_output || '无原始输出'}</pre>
+
+                            ${result.error ? `<h6 class="card-title mt-3 text-danger">错误信息:</h6>
+                            <pre class="bg-light p-2 rounded text-danger">${result.error}</pre>` : ''}
+
+                            ${result.template_used ? `<h6 class="card-title mt-3">使用的模板:</h6>
+                            <pre class="bg-light p-2 rounded">${result.template_used}</pre>` : ''}
+                        </div>
+                    `;
+
+                    resultsContent.appendChild(commandCard);
+                });
+            } else if (data) {
+                // 单命令响应格式 - 处理API返回的实际格式
+                const commandCard = document.createElement('div');
+                commandCard.className = 'card mb-3';
+
+                // API返回格式: {command, parsed_result, raw_output, template_used}
+                const commandResult = data.parsed_result || data.raw_output || '无结果';
+                const statusClass = data.error ? 'text-danger' : 'text-success';
+                const statusText = data.error ? '失败' : '成功';
+
+                commandCard.innerHTML = `
+                    <div class="card-header">
+                        <strong>命令:</strong> ${data.command || '未知命令'}
+                        <span class="float-end ${statusClass}">${statusText}</span>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-title">解析结果:</h6>
+                        <pre class="bg-light p-2 rounded">${JSON.stringify(commandResult, null, 2)}</pre>
+
+                        <h6 class="card-title mt-3">原始输出:</h6>
+                        <pre class="bg-light p-2 rounded">${data.raw_output || '无原始输出'}</pre>
+
+                        ${data.error ? `<h6 class="card-title mt-3 text-danger">错误信息:</h6>
+                        <pre class="bg-light p-2 rounded text-danger">${data.error}</pre>` : ''}
+
+                        ${data.template_used ? `<h6 class="card-title mt-3">使用的模板:</h6>
+                        <pre class="bg-light p-2 rounded">${data.template_used}</pre>` : ''}
+                    </div>
+                `;
+
+                resultsContent.appendChild(commandCard);
+            } else {
+                resultsContent.innerHTML = '<div class="alert alert-warning">未找到执行结果</div>';
+            }
+
+            resultsDiv.style.display = 'block';
+        }
+
+        // 打开命令执行模态框时初始化数据
+        function openCommandModal() {
+            // 加载设备列表
+            loadDevicesForCommandModal();
+
+            // 加载支持的命令
+            loadSupportedCommands();
+
+            // 重置表单
+            document.getElementById('commandType').value = 'single';
+            document.getElementById('customCommand').value = '';
+            document.getElementById('batchCommands').value = '';
+            document.getElementById('saveToLog').checked = false;
+
+            // 重置显示
+            document.getElementById('singleCommandGroup').style.display = 'block';
+            document.getElementById('multipleCommandGroup').style.display = 'none';
+            document.getElementById('commandResults').style.display = 'none';
+
+            // 打开模态框
+            const modal = new bootstrap.Modal(document.getElementById('commandModal'));
+            modal.show();
+        }
+
+        // 加载设备列表到命令执行模态框
+        function loadDevicesForCommandModal() {
+            const deviceSelect = document.getElementById('commandDevice');
+            deviceSelect.innerHTML = '';
+
+            fetch('/api/devices')
+                .then(response => response.json())
+                .then(res => {
+                    if (res.status === 'success' && Array.isArray(res.data)) {
+                        res.data.forEach(device => {
+                            const option = document.createElement('option');
+                            option.value = device.id;
+                            option.textContent = `${device.name} (${device.host})`;
+                            deviceSelect.appendChild(option);
+                        });
+                    }
+                })
+                .catch(err => {
+                    console.error('加载设备列表失败:', err);
+                });
+        }
 
         // 更新仪表板数据
         function updateDashboard() {
@@ -609,7 +951,7 @@
                 const item = document.createElement('a');
                 item.className = 'list-group-item list-group-item-action device-card';
                 item.href = '#';
-                item.onclick = () => selectDevice(device);
+                item.onclick = (e) => selectDevice(device, e);
 
                 item.innerHTML = `
                     <div class="d-flex justify-content-between align-items-center">
@@ -668,12 +1010,12 @@
         }
 
         // 选择设备
-        function selectDevice(device) {
+        function selectDevice(device, e) {
             currentDevice = device;
             document.querySelectorAll('#device-list .list-group-item').forEach(item => {
                 item.classList.remove('active');
             });
-            event.target.closest('.list-group-item').classList.add('active');
+            e.target.closest('.list-group-item').classList.add('active');
 
             // 可以在这里加载设备相关的数据
         }
@@ -1110,21 +1452,6 @@
             updateDashboard();
             alert('数据已刷新');
         }
-
-        // 页面加载时初始化
-        document.addEventListener('DOMContentLoaded', function() {
-            loadDevices();
-            updateDashboard();
-
-            // 初始化批量模式事件监听器
-            const batchModeCheckbox = document.getElementById('batchMode');
-            if (batchModeCheckbox) {
-                batchModeCheckbox.addEventListener('change', function() {
-                    const batchGroup = document.getElementById('batchTargetsGroup');
-                    batchGroup.style.display = this.checked ? 'block' : 'none';
-                });
-            }
-        });
     </script>
 </body>
 </html>
